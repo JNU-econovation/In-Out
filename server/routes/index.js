@@ -1,12 +1,9 @@
 var express = require('express');
 var fs = require('fs');
 var router = express.Router();
+var indexController = require('../controller/index');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  fs.readFile('/public/index.html', (err, data)=>{
-    res.end(data);
-  });
-});
+router.get('/', indexController.getIndexPage);
 
 module.exports = router;
