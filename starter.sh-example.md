@@ -1,8 +1,8 @@
 # react - build
 
 cd client && npm install
-echo password | sudo rm -rf ./build/_ && npm run build
-cd ../server && echo password | sudo rm -rf ./public/_
+echo password | sudo -S rm -rf ./build/_ && npm run build
+cd ../server && echo password | sudo -S rm -rf ./public/_
 cd ..
 cp -a ./client/build/. server/public
 
