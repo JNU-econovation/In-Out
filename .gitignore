@@ -22,5 +22,10 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+<<<<<<< HEAD
 starter.sh
 server/public/**
+=======
+
+/server/public
+>>>>>>> 14fa148756e16617751b892edfa66602c59409ae
