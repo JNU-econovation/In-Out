@@ -4,7 +4,7 @@ const Sequelize = require('sequelize');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/config.json')[env];
-const application = require(__dirname + "/application");
+const enrollment = require(__dirname + "/enrollment");
 const user = require(__dirname + "/user");
 const db = {};
 
@@ -36,8 +36,8 @@ db.Sequelize = Sequelize;
 
 //mapping
 db.User = user(sequelize, Sequelize);
-db.Application = application(sequelize, Sequelize);
-db.User.hasMany(db.Application);
-db.Application.belongsTo(db.User);
+db.Enrollment = enrollment(sequelize, Sequelize);
+db.User.hasMany(db.Enrollment);
+db.Enrollment.belongsTo(db.User);
 
 module.exports = db;

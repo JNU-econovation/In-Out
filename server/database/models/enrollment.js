@@ -1,8 +1,12 @@
 module.exports = (sequelize, DataTypes) => {
-    const application = sequelize.define('application', {
+    const enrollment = sequelize.define('enrollment', {
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
         today: {
             type: DataTypes.DATE,
-            primaryKey: true,
             allowNull: false
         },
         memberId: {
@@ -18,8 +22,8 @@ module.exports = (sequelize, DataTypes) => {
     }, {
         underscored: true,
         freezeTableName: true,
-        tableName: 'application'
+        tableName: 'enrollment'
     });
 
-    return application;
+    return enrollment;
 }
