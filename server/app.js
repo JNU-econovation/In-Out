@@ -7,8 +7,8 @@ var mysql = require('mysql');
 
 var indexRouter = require('./routes/index');
 
-var dbconfig = require('./database/dbconfig');
-var connectionDB = mysql.createConnection(dbconfig);
+// var dbconfig = require('./database/dbconfig');
+// var connectionDB = mysql.createConnection(dbconfig);
 
 var app = express();
 
