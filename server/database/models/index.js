@@ -35,8 +35,8 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 //mapping
-db.User = require('./user')(sequelize, Sequelize);
-db.Application = require('./application')(sequelize, Sequelize);
+db.User = user(sequelize, Sequelize);
+db.Application = application(sequelize, Sequelize);
 db.User.hasMany(db.Application);
 db.Application.belongsTo(db.User);
 
