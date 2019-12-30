@@ -5,7 +5,6 @@ import { ListInfoInput, ListInfoLabel } from "../../components/list-info";
 export const MyPage = () => {
   return (
     <StyledBox>
-      <Header></Header>
       <UpdateFrom>
         <ListInfoLabel subject={"이름"} value={"김기표"}></ListInfoLabel>
         <ListInfoInput subject={"기존 비밀번호"}></ListInfoInput>
