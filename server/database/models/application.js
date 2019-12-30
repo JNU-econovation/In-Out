@@ -1,24 +1,16 @@
 module.exports = (sequelize, DataTypes) => {
     const application = sequelize.define('application', {
-        id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true,
-        },
         today: {
             type: DataTypes.DATE,
+            primaryKey: true,
             allowNull: false
         },
-        school_numbers: {
+        memberId: {
             type: DataTypes.INTEGER,
             allowNull: false
         },
         reason: {
             type: DataTypes.STRING(100),
-            allowNull: false
-        },
-        school_numbers: {
-            type: DataTypes.INTEGER,
             allowNull: false
         },
         createdAt: DataTypes.DATE,

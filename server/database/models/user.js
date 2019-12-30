@@ -1,12 +1,8 @@
 module.exports = (sequelize, DataTypes) => {
     const user = sequelize.define('user', {
-        id: {
+        memberId: {
             type: DataTypes.INTEGER,
             primaryKey: true,
-            autoIncrement: true,
-        },
-        memberId: {
-            type: DataTypes.STRING(10),
             allowNull: false
         },
         name: {
@@ -17,12 +13,8 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(20),
             allowNull: false
         },
-        school_numbers: {
+        role: {
             type: DataTypes.INTEGER,
-            allowNull: false
-        },
-        isGraduated: {
-            type: DataTypes.BOOLEAN,
             defaultValue: false
         },
         createdAt: DataTypes.DATE,
