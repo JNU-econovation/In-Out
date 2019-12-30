@@ -5,13 +5,9 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mysql = require('mysql');
 
+const database = require('./database/models');
 var indexRouter = require('./routes/index');
-
-// var dbconfig = require('./database/dbconfig');
-// var connectionDB = mysql.createConnection(dbconfig);
-
 var app = express();
-
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -38,5 +34,16 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+//db - connection
+database.sequelize.sync()
+  .then(() => {
+    console.log('✓ DB connection success.');
+  })
+  .catch(err => {
+    console.error(err);
+    console.log('✗ DB connection error. Please make sure DB is running.');
+    process.exit();
+  });
 
 module.exports = app;
