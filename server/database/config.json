@@ -1,0 +1,10 @@
+{
+    "development": {
+        "username": "root",
+        "password": "zz1356",
+        "database": "inandout",
+        "host": "localhost",
+        "dialect": "mysql",
+        "operatorAliases": false
+    }
+}
