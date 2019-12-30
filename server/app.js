@@ -35,15 +35,15 @@ app.use(function (err, req, res, next) {
   res.render('error');
 });
 
-//db - connection
-database.sequelize.sync()
-  .then(() => {
-    console.log('✓ DB connection success.');
-  })
-  .catch(err => {
-    console.error(err);
-    console.log('✗ DB connection error. Please make sure DB is running.');
-    process.exit();
-  });
+// //db - connection
+// database.sequelize.sync()
+//   .then(() => {
+//     console.log('✓ DB connection success.');
+//   })
+//   .catch(err => {
+//     console.error(err);
+//     console.log('✗ DB connection error. Please make sure DB is running.');
+//     process.exit();
+//   });
 
 module.exports = app;
