@@ -7,11 +7,19 @@ var mysql = require('mysql');
 
 var indexRouter = require('./routes/index');
 
-// var dbconfig = require('./database/dbconfig');
-// var connectionDB = mysql.createConnection(dbconfig);
+//db - connection
+const database = require('./database/models');
+database.sequelize.sync()
+  .then(() => {
+    console.log('✓ DB connection success.');
+  })
+  .catch(err => {
+    console.error(err);
+    console.log('✗ DB connection error. Please make sure DB is running.');
+    process.exit();
+  });
 
 var app = express();
-
 
 app.use(logger('dev'));
 app.use(express.json());
