@@ -28,9 +28,7 @@ module.exports = (sequelize, DataTypes) => {
         createdAt: DataTypes.DATE,
         updatedAt: DataTypes.DATE,
     }, {
-        underscored: true,
-        freezeTableName: true,
-        tableName: 'user'
+        //option
     });
 
     return user;
