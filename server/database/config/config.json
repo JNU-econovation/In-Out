@@ -1,10 +1,9 @@
 {
   "development": {
     "username": "root",
-    "password": "econo",
+    "password": "zz1356",
     "database": "inandout",
     "host": "127.0.0.1",
-    "port": "33306",
     "dialect": "mysql",
     "operatorsAliases": "0"
   },
