@@ -4,6 +4,7 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var mysql = require("mysql");
+const bodyParser = require("body-parser");
 const passport = require("passport");
 const passportConfig = require("./config/passport");
 
@@ -20,6 +21,8 @@ app.use(
 );
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 //passport
 app.use(passport.initialize());
 passportConfig();
@@ -43,15 +46,16 @@ app.use(function(err, req, res, next) {
   res.render("error");
 });
 
-// //db - connection
-// database.sequelize.sync()
-//   .then(() => {
-//     console.log('✓ DB connection success.');
-//   })
-//   .catch(err => {
-//     console.error(err);
-//     console.log('✗ DB connection error. Please make sure DB is running.');
-//     process.exit();
-//   });
+//db - connection
+database.sequelize
+  .sync()
+  .then(() => {
+    console.log("✓ DB connection success.");
+  })
+  .catch(err => {
+    console.error(err);
+    console.log("✗ DB connection error. Please make sure DB is running.");
+    process.exit();
+  });
 
 module.exports = app;

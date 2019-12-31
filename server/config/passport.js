@@ -6,20 +6,16 @@ const LocalStrategy = require("passport-local").Strategy;
 require("dotenv").config();
 
 module.exports = () => {
-  // Local Strategy
   passport.use(
     new LocalStrategy(
       {
         usernameField: "memberId",
         passwordField: "password"
       },
-      function(email, password, done) {
-        // 이 부분에선 저장되어 있는 User를 비교하면 된다.
-        console.log(email + " " + password);
-
-        if (!(email == "test" && password == "1111")) {
+      (memberId, password, done) => {
+        if (!(memberId == "test" && password == "1111")) {
           return done(null, false, {
-            message: "Incoreect memberID or passord"
+            message: "Incoreect memberID or password"
           });
         } else {
           var user = {
@@ -51,7 +47,7 @@ module.exports = () => {
         jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
         secretOrKey: "hello"
       },
-      function(jwtPayload, done) {
+      (jwtPayload, done) => {
         var user = {
           memberId: "test",
           password: "1111"
