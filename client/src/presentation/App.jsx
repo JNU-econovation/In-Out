@@ -3,6 +3,8 @@ import { createGlobalStyle, ThemeProvider } from "styled-components";
 import { MyPage } from "./pages/mypage";
 import { theme } from "./theme/theme";
 import Login from "./pages/home/login";
+import Register from "../presentation/pages/home/register";
+
 function App() {
   const Global = createGlobalStyle`
   html{
@@ -20,7 +22,7 @@ function App() {
     <Fragment>
       <ThemeProvider theme={theme}>
         <Global></Global>
-        <Login />
+        <Register />
       </ThemeProvider>
     </Fragment>
   );
