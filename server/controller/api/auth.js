@@ -8,6 +8,7 @@ module.exports = {
     passport.authenticate("local", {
       session: false
     }, (err, user) => {
+
       if (err || !user) {
         return res.status(400).json({
           message: "Something is not right",
@@ -33,5 +34,8 @@ module.exports = {
   },
   tmpInsert: (req, res) => {
     db.insertUser(res, req.body);
+  },
+  tmpFindone: (req, res) => {
+    db.findUser(res, req.body);
   }
 };

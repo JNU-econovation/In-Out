@@ -27,5 +27,18 @@ module.exports = {
             .catch(err => {
                 res.send(err);
             });
+    },
+    findUser: (memberId, callback) => {
+        console.log(memberId);
+
+        database.User.findOne({
+                where: {
+                    memberId: memberId
+                }
+            })
+            .then(user => {
+                callback(null, user.dataValues);
+            })
+            .catch(err => callback(err, null));
     }
 }
