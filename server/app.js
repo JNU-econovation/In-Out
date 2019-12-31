@@ -30,7 +30,7 @@ app.use(passport.initialize());
 passportConfig();
 
 //connection DB
-db.connect();
+//db.connect();
 
 app.use("/", indexRouter);
 app.use("/api", require("./routes/api/auth"));

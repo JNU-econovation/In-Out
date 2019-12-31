@@ -3,7 +3,7 @@ const passportJWT = require("passport-jwt");
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
 const LocalStrategy = require("passport-local").Strategy;
-const db = require('./../database/connectionDB');
+const DBForUser = require('./../database/transfer/user');
 require("dotenv").config();
 
 module.exports = () => {
@@ -13,7 +13,8 @@ module.exports = () => {
         passwordField: "password"
       },
       (memberId, password, done) => {
-        return db.findUser(memberId, (err, user) => {
+        return DBForUser.findUserById(memberId, (err, user) => {
+
           if (err) {
             return done(err);
           }
