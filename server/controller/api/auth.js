@@ -25,7 +25,7 @@ exports.login = (req, res) => {
         });
       }
       //jwt.sign("token내용", "JWT secretkey");
-      const token = jwt.sign(user, "hello");
+      const token = jwt.sign(user.memberId, "hello");
 
       return res.json({
         user,
@@ -35,17 +35,29 @@ exports.login = (req, res) => {
   })(req, res);
 };
 
-exports.tmpInsert = (req, res) => {
-  DBForUser.insertUser(req.body, (err, result) => {
-    if (err) {
-      return res.status(400).json({
-        message: "데이터를 저장하지 못하거나 db 연결실패"
-      });
-    }
+exports.verifyToken = (req, res, next) => {
 
-    return res.send(result);
-  });
-}
+  var token = req.headers['x-access-token'] || req.body.token
+  console.log(token);
+
+  if (typeof token !== 'undefined') {
+    var decoded = jwt.verify(token, "hello");
+    console.log(decoded);
+
+    DBForUser.findUserById(decoded, (err, result) => {
+      if (err) {
+        return res.status(400).json({
+          message: "데이터를 저장하지 못하거나 db 연결실패"
+        });
+      }
+
+      req.user = result;
+      next();
+    });
+  } else {
+    res.status(403).send(err.message);
+  }
+};
 
 exports.tmpFindone = (req, res) => {
   DBForUser.findUserById(req.body.memberId, (err, result) => {

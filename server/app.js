@@ -34,6 +34,7 @@ passportConfig();
 
 app.use("/", indexRouter);
 app.use("/api", require("./routes/api/auth"));
+app.use("/api/admin", require("./routes/api/admin"));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
