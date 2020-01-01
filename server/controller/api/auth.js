@@ -37,36 +37,13 @@ exports.login = (req, res) => {
 
 exports.verifyToken = (req, res, next) => {
 
-  var token = req.headers['x-access-token'] || req.body.token
-  console.log(token);
+  let token = req.headers['x-access-token'] || req.body.token;
 
   if (typeof token !== 'undefined') {
-    var decoded = jwt.verify(token, "hello");
-    console.log(decoded);
-
-    DBForUser.findUserById(decoded, (err, result) => {
-      if (err) {
-        return res.status(400).json({
-          message: "데이터를 저장하지 못하거나 db 연결실패"
-        });
-      }
-
-      req.user = result;
-      next();
-    });
+    let decoded = jwt.verify(token, "hello");
+    req.memberId = decoded;
+    next();
   } else {
-    res.status(403).send(err.message);
+    res.status(403).send("인증 안됨.");
   }
 };
-
-exports.tmpFindone = (req, res) => {
-  DBForUser.findUserById(req.body.memberId, (err, result) => {
-    if (err) {
-      return res.status(400).json({
-        message: "데이터를 찾지 못하거나 db 연결실패"
-      });
-    }
-
-    return res.send(result);
-  });
-}
