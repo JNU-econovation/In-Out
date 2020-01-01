@@ -19,7 +19,7 @@ module.exports = () => {
             return done(err);
           }
 
-          if (user.memberId == memberId && user.password == password) {
+          if (user.password == password) {
             return done(null, user, {
               message: "Logged In Successfully"
             })
@@ -35,22 +35,25 @@ module.exports = () => {
   //JWT Strategy
   passport.use(
     new JWTStrategy({
-        jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+        jwtFromRequest: ExtractJWT.fromAuthHeaderWithScheme('JWT'),
         secretOrKey: "hello"
       },
       (jwtPayload, done) => {
-        var user = {
-          memberId: 1234,
-          password: "1111"
-        };
-        return done(null, user);
-        // return UserModel.findOneById(jwtPayload.id)
-        //   .then(user => {
-        //     return done(null, user);
-        //   })
-        //   .catch(err => {
-        //     return done(err);
-        //   });
+
+        DBForUser.findUserById(jwtPayload.memberId, (err, user) => {
+          if (err) {
+            return done(err);
+          }
+
+          if (user.password == password) {
+            return done(null, user, {
+              message: "Logged In Successfully"
+            })
+          }
+          return done(null, false, {
+            message: "Incoreect memberID or password"
+          });
+        });
       }
     )
   );
