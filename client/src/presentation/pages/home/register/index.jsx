@@ -14,11 +14,7 @@ class Register extends Component {
         <NamedInputBox>
           <InputLabel>날짜</InputLabel>
           <ClockBox>
-            <Clock
-              format={"YYYY 년 MM 월 DD 일"}
-              ticking={true}
-              timezone={"KR"}
-            />
+            <Clock format={"YYYY년 MM월 DD일"} ticking={true} timezone={"KR"} />
           </ClockBox>
         </NamedInputBox>
         <NamedInputBox>
@@ -63,5 +59,9 @@ const InputLabel = styled.label`
 `;
 
 const NamedInput = styled.input`
+  width: 100%;
+`;
+
+const ClockBox = styled.section`
   width: 100%;
 `;
