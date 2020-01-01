@@ -1,15 +1,32 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import Clock from "react-live-clock";
+import Select from "react-select";
+
+// select option
+const options = [
+  { value: "study", label: "공부" },
+  { value: "metting", label: "회의" },
+  { value: "develop", label: "개발" },
+  { value: "manage", label: "동아리 운영" }
+];
 
 class Register extends Component {
+  state = {
+    selectedOption: null
+  };
+  handleChange = selectedOption => {
+    this.setState({ selectedOption });
+  };
   render() {
+    const { selectedOption } = this.state;
+
     return (
       <RegisterBox>
         <label>Register</label>
         <NamedInputBox>
           <InputLabel>이름</InputLabel>
-          <InputLabel>김키키</InputLabel>
+          <NamedText>김키키</NamedText>
         </NamedInputBox>
         <NamedInputBox>
           <InputLabel>날짜</InputLabel>
@@ -19,6 +36,13 @@ class Register extends Component {
         </NamedInputBox>
         <NamedInputBox>
           <InputLabel>사유</InputLabel>
+          <SelectBox>
+            <Select
+              value={selectedOption}
+              onChange={this.handleChange}
+              options={options}
+            />
+          </SelectBox>
         </NamedInputBox>
         <button>Register</button>
       </RegisterBox>
@@ -58,7 +82,11 @@ const InputLabel = styled.label`
   width: 130px;
 `;
 
-const NamedInput = styled.input`
+const NamedText = styled.text`
+  width: 100%;
+`;
+
+const SelectBox = styled.section`
   width: 100%;
 `;
 
