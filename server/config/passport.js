@@ -4,7 +4,7 @@ const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
 const LocalStrategy = require("passport-local").Strategy;
 const DBForUser = require('./../database/transfer/user');
-require("dotenv").config();
+const key = require("./../config/keys.json");
 
 module.exports = () => {
   passport.use(
@@ -36,7 +36,7 @@ module.exports = () => {
   passport.use(
     new JWTStrategy({
         jwtFromRequest: ExtractJWT.fromAuthHeaderWithScheme('JWT'),
-        secretOrKey: "hello"
+        secretOrKey: key.tokenKey
       },
       (jwtPayload, done) => {
 

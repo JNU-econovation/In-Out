@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
-require("dotenv").config();
-const DBForUser = require('./../../database/transfer/user');
+const key = require('./../../config/keys.json')
 
 exports.login = (req, res) => {
   passport.authenticate("local", {
@@ -10,8 +9,7 @@ exports.login = (req, res) => {
 
     if (err || !user) {
       return res.status(400).json({
-        message: "Something is not right",
-        user: user
+        message: "Something is not right"
       });
     }
 
@@ -20,15 +18,18 @@ exports.login = (req, res) => {
     }, err => {
       if (err) {
         return res.status(400).json({
-          message: "login Fail",
-          user: user
+          message: "login Fail"
         });
       }
-      //jwt.sign("token내용", "JWT secretkey");
-      const token = jwt.sign(user.memberId, "hello");
+
+      let tokenUser = {
+        memberId: user.memberId,
+        role: user.role
+      }
+
+      const token = jwt.sign(tokenUser, key.tokenKey);
 
       return res.json({
-        user,
         token
       });
     });
@@ -40,8 +41,8 @@ exports.verifyToken = (req, res, next) => {
   let token = req.headers['x-access-token'] || req.body.token;
 
   if (typeof token !== 'undefined') {
-    let decoded = jwt.verify(token, "hello");
-    req.memberId = decoded;
+    let decoded = jwt.verify(token, key.tokenKey);
+    req.user = decoded;
     next();
   } else {
     res.status(403).send("인증 안됨.");
