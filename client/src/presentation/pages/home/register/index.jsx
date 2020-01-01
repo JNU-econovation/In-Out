@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+import Clock from "react-live-clock";
 
 class Register extends Component {
   render() {
@@ -12,6 +13,13 @@ class Register extends Component {
         </NamedInputBox>
         <NamedInputBox>
           <InputLabel>날짜</InputLabel>
+          <ClockBox>
+            <Clock
+              format={"YYYY 년 MM 월 DD 일"}
+              ticking={true}
+              timezone={"KR"}
+            />
+          </ClockBox>
         </NamedInputBox>
         <NamedInputBox>
           <InputLabel>사유</InputLabel>
