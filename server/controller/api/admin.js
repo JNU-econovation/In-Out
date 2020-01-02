@@ -4,8 +4,6 @@ exports.createUser = async (req, res) => {
 
     try {
         let result = await DBForUser.insertUser(req.body);
-        console.log(result);
-
         return res.send(result);
     } catch {
         return res.status(400).json({
@@ -31,27 +29,17 @@ exports.isAdmin = (req, res, next) => {
     next();
 }
 
-exports.changeRole = (req, res) => {
+exports.changeRole = async (req, res) => {
     let memberIdForUpdate = req.body.memberId;
     let roleForUpdate = req.body.role;
 
+    try {
+        await DBForUser.changeRole(memberIdForUpdate, roleForUpdate);
 
-    DBForUser.changeRole(memberIdForUpdate, roleForUpdate, (err, success) => {
-
-        if (err) {
-            return res.status(400).json({
-                message: "something is not right"
-            });
-        }
-
-        if (success == "ok") {
-            return res.status(200).json({
-                role: changedRole
-            });
-        }
-
-        return res.status(400).json({
-            message: "something is not right"
+        return res.status(200).json({
+            role: roleForUpdate
         });
-    });
+    } catch (err) {
+        return res.status(400);
+    };
 }

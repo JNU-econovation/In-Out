@@ -1,6 +1,6 @@
 const database = require('./../models');
 
-exports.insertUser = async (user, callback) => {
+exports.insertUser = async (user) => {
     try {
         return await database.User.create({
             memberId: user.memberId,
@@ -13,35 +13,36 @@ exports.insertUser = async (user, callback) => {
     }
 }
 
-exports.findUserById = (memberId, callback) => {
-    database.User.findOne({
+exports.findUserById = async (memberId) => {
+    try {
+        let user = await database.User.findOne({
             where: {
                 memberId: memberId
             }
-        })
-        .then(user => {
-            callback(null, user.dataValues);
-        })
-        .catch(err => callback(err, null));
+        });
+
+        return user.dataValues;
+    } catch (err) {
+        console.log(err);
+    }
 }
 
-exports.changeRole = (memberId, role, callback) => {
-    database.sequelize.transaction().then((transaction) => {
-        return database.User.update({
-            role: role
-        }, {
-            where: {
-                memberId: memberId
-            }
-        }, {
-            transaction: transaction
-        }).then((role) => {
-            callback(null, "ok");
-        }).catch(err => {
-            callback(err)
-        })
-
-    });
+exports.changeRole = async (memberId, role) => {
+    try {
+        return await sequelize.transaction(async (transaction) => {
+            return await database.User.update({
+                role: role
+            }, {
+                where: {
+                    memberId: memberId
+                }
+            }, {
+                transaction: transaction
+            });
+        });
+    } catch (err) {
+        console.log(err);
+    }
 }
 
 exports.changePassword = (memberId, changedPassword, callback) => {
