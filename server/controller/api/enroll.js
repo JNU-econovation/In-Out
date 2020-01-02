@@ -1,4 +1,5 @@
 const models = require('../../database/models');
+const dateHandler = require('../../util/date-handler');
 
 const showEnrollmentsByDate = async (req, res) => {
     try {
@@ -42,7 +43,19 @@ const showEnrollment = async (req, res) => {
 const createEnrollment = async (req, res) => {
     let body = req.body;
 
-    //TODO 평일 08:00 ~ 17:00가 아니거나 공휴일인 경우 출입 신청 불가 기능
+    //평일 08:00 ~ 17:00가 아니거나 공휴일인 경우 출입 신청 불가 기능
+    if (dateHandler.isWeekend()) {
+        return res.status(403).json({
+            message: '주말에는 출입 신청을 할 수 없습니다.'
+        });
+    }
+
+    if (!dateHandler.isInTime()) {
+        return rews.status(403).json({
+            message: '출입 신청은 당일 08:00 ~ 17:00 사이에만 신청 가능합니다.'
+        })
+    }
+
     try {
         const enrollment = await models.Enrollment.create({
             today: new Date().getDate(),
@@ -62,6 +75,19 @@ const createEnrollment = async (req, res) => {
 
 const updateEnrollment = async (req, res) => {
     let body  = req.body;
+
+    if (dateHandler.isWeekend()) {
+        return res.status(403).json({
+            message: '주말에는 출입 신청을 할 수 없습니다.'
+        });
+    }
+
+    if (!dateHandler.isInTime()) {
+        return rews.status(403).json({
+            message: '출입 신청은 당일 08:00 ~ 17:00 사이에만 신청 가능합니다.'
+        })
+    }
+
     const enrollment = await models.Enrollment.update({
 
     })
