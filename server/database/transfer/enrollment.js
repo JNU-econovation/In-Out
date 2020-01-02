@@ -57,6 +57,18 @@ exports.changeReason = async (memberId, reason) => {
         });
     } catch (err) {
         console.log(err);
+    }
+}
 
+exports.findTodayById = async (memberId, today) => {
+    try {
+        return await database.Enrollment.findOne({
+            where: {
+                memberId: memberId,
+                today: today
+            }
+        });
+    } catch (err) {
+        console.log(err);
     }
 }
