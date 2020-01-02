@@ -45,3 +45,22 @@ exports.changeRole = (memberId, role, callback) => {
 
     });
 }
+
+exports.changePassword = (memberId, changedPassword, callback) => {
+    database.sequelize.transaction().then((transaction) => {
+        return database.User.update({
+            password: changedPassword
+        }, {
+            where: {
+                memberId: memberId
+            }
+        }, {
+            transaction: transaction
+        }).then((role) => {
+            callback(null, "ok");
+        }).catch(err => {
+            callback(err)
+        })
+
+    });
+}
