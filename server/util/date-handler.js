@@ -1,7 +1,6 @@
 const SUNDAY_CODE = 0;
 const SATURDAY_CODE = 6;
 
-
 const isWeekend = () => {
     let date = new Date();
     let today = date.getDay();
@@ -27,12 +26,10 @@ const isInTime = () => {
 
 }
 
-var dtB = new Date(2009, 7, 24, 14, 52, 10);
-
 const setStartTime = (date) => {
     let year = date.getFullYear();
     let month = date.getMonth();
-    let day = date.getDay();
+    let day = date.getDay();;
 
     return new Date(year, month, day, 8, 0, 0);
 }
@@ -42,10 +39,19 @@ const setEndTime = (date) => {
     let month = date.getMonth();
     let day = date.getDay();
 
-    return new Date(year, month, day, 17, 0, 0);
+    return new Date(year, month, day, 20, 0, 0);
 }
+
+const getFormatDate = (Date) => {
+    let year = Date.getFullYear();
+    let month = Date.getMonth() + 1;
+    let date = Date.getDate();
+
+    return [year, month, date].join('-');
+};
 
 module.exports = {
     isWeekend,
-    isInTime
+    isInTime,
+    getFormatDate
 }
