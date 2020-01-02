@@ -3,7 +3,7 @@ var router = express.Router();
 var enrollController = require('../../controller/api/enroll');
 
 /* GET home page. */
-router.get('/processed', enrollController.showEnrollment);
+router.get('/', enrollController.showEnrollment);
 router.post('/process', enrollController.createEnrollment);
 router.put('/process', enrollController.updateEnrollment);
 

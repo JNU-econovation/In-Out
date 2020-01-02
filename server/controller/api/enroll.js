@@ -3,7 +3,7 @@ const enrollmentRepository = require('../../database/transfer/enrollment');
 
 const showEnrollmentsByDate = async (req, res) => {
     try {
-        let date = req.body.date;
+        let date = req.query.date;
         const enrollments = await enrollmentRepository.getEnrollmentsByDate(date);
 
         return res.status(200).json({
@@ -20,9 +20,11 @@ const showEnrollmentsByDate = async (req, res) => {
 }
 
 const showEnrollment = async (req, res) => {
+    let memberId = req.query.memberId;
+    let today = dateHandler.getFormatDate(new Date());
+    console.log(today);
+
     try {
-        let memberId = req.body.memberId;
-        let today = formatter.getFormatDate(new Date());
         const enrollment = await enrollmentRepository.findTodayById(memberId, today);
 
         return res.status(200).json({
@@ -40,7 +42,11 @@ const showEnrollment = async (req, res) => {
 
 const createEnrollment = async (req, res) => {
     //평일 08:00 ~ 17:00가 아니거나 공휴일인 경우 출입 신청 불가 기능
-    let now = new Date();
+    const memberId = req.body.memberId;
+    const reason = req.body.reason;
+    const now = new Date();
+    let result;
+
     if (dateHandler.isWeekend(now)) {
         return res.status(403).json({
             message: '주말에는 출입 신청을 할 수 없습니다.'
@@ -54,18 +60,15 @@ const createEnrollment = async (req, res) => {
     }
 
     try {
-        let enrollment = {
-            memberId: req.body.memberId,
+
+        const enrollment = {
+            memberId: memberId,
             today: dateHandler.getFormatDate(now),
-            reason: req.body.reason
+            reason: reason
         }
 
-        let result = await enrollmentRepository.createEnrollment(enrollment);
+        result = await enrollmentRepository.createEnrollment(enrollment);
 
-        return res.status(200).json({
-            result,
-            message: "등록 완료!"
-        });
     } catch (error) {
         console.log('에러 ', error.message);
         return res.status(500).json({
@@ -73,16 +76,21 @@ const createEnrollment = async (req, res) => {
             error: error
         });
     }
+    return res.status(200).json({
+        result,
+        message: "등록 완료!"
+    });
 }
 
 const updateEnrollment = async (req, res) => {
-    if (dateHandler.isWeekend()) {
+    const now = new Date();
+    if (dateHandler.isWeekend(now)) {
         return res.status(403).json({
             message: '주말에는 출입 신청을 할 수 없습니다.'
         });
     }
 
-    if (!dateHandler.isInTime()) {
+    if (!dateHandler.isInTime(now)) {
         return res.status(403).json({
             message: '출입 신청은 당일 08:00 ~ 17:00 사이에만 신청 가능합니다.'
         })
@@ -96,6 +104,9 @@ const updateEnrollment = async (req, res) => {
             error: error
         })
     }
+    return res.status(200).json({
+        message: "update 됨."
+    });
 }
 
 module.exports = {

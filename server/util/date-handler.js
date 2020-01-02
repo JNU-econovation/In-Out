@@ -13,7 +13,7 @@ const isWeekend = (date) => {
 
 const isInTime = (now) => {
     let startTime = setTime(8);
-    let endTime = setTime(20);
+    let endTime = setTime(23);
     let time = now.getTime();
 
     if (time > startTime.getTime() && time < endTime.getTime()) {

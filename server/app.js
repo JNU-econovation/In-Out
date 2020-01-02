@@ -35,7 +35,7 @@ db.connect();
 app.use("/", indexRouter);
 app.use("/api", require("./routes/api/auth"));
 app.use("/api/admin", require("./routes/api/admin"));
-app.use("/api/enrollment", require("./routes/api/enroll"))
+app.use("/api/enrollments", require("./routes/api/enroll"))
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

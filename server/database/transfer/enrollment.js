@@ -68,7 +68,7 @@ exports.findTodayById = async (memberId, today) => {
     try {
         return await database.Enrollment.findOne({
             where: {
-                memberId: memberId,
+                userMemberId: memberId,
                 today: today
             }
         });
