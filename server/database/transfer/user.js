@@ -29,17 +29,17 @@ exports.findUserById = async (memberId) => {
 
 exports.changeRole = async (memberId, role) => {
     try {
-        return await sequelize.transaction(async (transaction) => {
-            return await database.User.update({
-                role: role
-            }, {
-                where: {
-                    memberId: memberId
-                }
-            }, {
-                transaction: transaction
-            });
+        const transaction = await database.sequelize.transaction();
+        await database.User.update({
+            role: role
+        }, {
+            where: {
+                memberId: memberId
+            }
+        }, {
+            transaction: transaction
         });
+        await transaction.commit();
     } catch (err) {
         console.log(err);
     }
@@ -47,17 +47,17 @@ exports.changeRole = async (memberId, role) => {
 
 exports.changePassword = async (memberId, changedPassword) => {
     try {
-        return await sequelize.transaction(async (transaction) => {
-            return await database.User.update({
-                password: changedPassword
-            }, {
-                where: {
-                    memberId: memberId
-                }
-            }, {
-                transaction: transaction
-            });
+        const transaction = await database.sequelize.transaction();
+        await database.User.update({
+            password: this.changePassword
+        }, {
+            where: {
+                memberId: memberId
+            }
+        }, {
+            transaction: transaction
         });
+        await transaction.commit();
     } catch (err) {
         console.log(err);
     }

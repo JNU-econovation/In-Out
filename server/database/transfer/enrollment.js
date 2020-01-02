@@ -48,17 +48,17 @@ exports.getEnrollmentsById = async (memberId) => {
 
 exports.changeReason = async (memberId, reason) => {
     try {
-        return await database.sequelize.transaction().then(async (transaction) => {
-            return await database.Enrollment.update({
-                reason: reason
-            }, {
-                where: {
-                    memberId: memberId
-                }
-            }, {
-                transaction: transaction
-            })
+        const transaction = await database.sequelize.transaction();
+        await database.Enrollment.update({
+            reason: reason
+        }, {
+            where: {
+                userMemberId: memberId
+            }
+        }, {
+            transaction: transaction
         });
+        await transaction.commit();
     } catch (err) {
         console.log(err);
     }
