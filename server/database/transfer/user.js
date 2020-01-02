@@ -26,3 +26,22 @@ exports.findUserById = (memberId, callback) => {
         })
         .catch(err => callback(err, null));
 }
+
+exports.changeRole = (memberId, role, callback) => {
+    database.sequelize.transaction().then((transaction) => {
+        return database.User.update({
+            role: role
+        }, {
+            where: {
+                memberId: memberId
+            }
+        }, {
+            transaction: transaction
+        }).then((role) => {
+            callback(null, "ok");
+        }).catch(err => {
+            callback(err)
+        })
+
+    });
+}

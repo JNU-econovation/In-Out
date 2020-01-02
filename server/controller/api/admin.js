@@ -28,3 +28,28 @@ exports.isAdmin = (req, res, next) => {
     }
     next();
 }
+
+exports.changeRole = (req, res) => {
+    let memberIdForUpdate = req.body.memberId;
+    let roleForUpdate = req.body.role;
+
+
+    DBForUser.changeRole(memberIdForUpdate, roleForUpdate, (err, success) => {
+
+        if (err) {
+            return res.status(400).json({
+                message: "something is not right"
+            });
+        }
+
+        if (success == "ok") {
+            return res.status(200).json({
+                role: changedRole
+            });
+        }
+
+        return res.status(400).json({
+            message: "something is not right"
+        });
+    });
+}
