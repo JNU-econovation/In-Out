@@ -1,40 +1,43 @@
 const database = require('./../models');
 
 
-exports.createEnrollments = (enroll, callback) => {
-    database.sequelize.transaction().then((transaction) => {
-        database.Enrollment.create({
+exports.createEnrollments = async (enroll) => {
+    try {
+        return await database.sequelize.transaction().then(async (transaction) => {
+            return await database.Enrollment.create({
                 today: enroll.today,
                 reason: enroll.reason,
                 memberId: enroll.memberId
             }, {
                 transaction: transaction
             })
-            .then(result => {
-                callback(null, result);
-            })
-            .catch(err => {
-                callback(err, null);
-            });
-    });
+        });
+    } catch (err) {
+        console.log(err);
+
+    }
 }
 
-exports.getEnrollmentsByDate = (date, callback) => {
-    database.Enrollment.findAll({
-        where: {
-            today: date
-        }
-    }).then(enrollments => {
-        callback(null, enrollments.dataValues);
-    }).catch(err => callback(err, null));
+exports.getEnrollmentsByDate = async (date) => {
+    try {
+        return await database.Enrollment.findAll({
+            where: {
+                today: date
+            }
+        })
+    } catch (err) {
+        console.log(err);
+    }
 }
 
-exports.getEnrollmentsById = (memberId, callback) => {
-    database.Enrollment.findAll({
-        where: {
-            memberId: memberId
-        }
-    }).then(enrollments => {
-        callback(null, enrollments.dataValues);
-    }).catch(err => callback(err, null));
+exports.getEnrollmentsById = async (memberId) => {
+    try {
+        return database.Enrollment.findAll({
+            where: {
+                memberId: memberId
+            }
+        })
+    } catch (err) {
+        console.log(err);
+    }
 }

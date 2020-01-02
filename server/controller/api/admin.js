@@ -1,15 +1,15 @@
 const DBForUser = require('./../../database/transfer/user');
 
-exports.createUser = (req, res) => {
-    DBForUser.insertUser(req.body, (err, result) => {
-        if (err) {
-            return res.status(400).json({
-                message: "데이터를 저장하지 못하거나 db 연결실패"
-            });
-        }
+exports.createUser = async (req, res) => {
 
+    try {
+        let result = await DBForUser.insertUser(req.body);
         return res.send(result);
-    });
+    } catch {
+        return res.status(400).json({
+            message: "데이터를 저장하지 못하거나 db 연결실패"
+        });
+    }
 }
 
 exports.isAdmin = (req, res, next) => {
@@ -29,27 +29,17 @@ exports.isAdmin = (req, res, next) => {
     next();
 }
 
-exports.changeRole = (req, res) => {
+exports.changeRole = async (req, res) => {
     let memberIdForUpdate = req.body.memberId;
     let roleForUpdate = req.body.role;
 
+    try {
+        await DBForUser.changeRole(memberIdForUpdate, roleForUpdate);
 
-    DBForUser.changeRole(memberIdForUpdate, roleForUpdate, (err, success) => {
-
-        if (err) {
-            return res.status(400).json({
-                message: "something is not right"
-            });
-        }
-
-        if (success == "ok") {
-            return res.status(200).json({
-                role: changedRole
-            });
-        }
-
-        return res.status(400).json({
-            message: "something is not right"
+        return res.status(200).json({
+            role: roleForUpdate
         });
-    });
+    } catch (err) {
+        return res.status(400);
+    };
 }

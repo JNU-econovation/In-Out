@@ -12,22 +12,22 @@ module.exports = () => {
         usernameField: "memberId",
         passwordField: "password"
       },
-      (memberId, password, done) => {
-        return DBForUser.findUserById(memberId, (err, user) => {
-
-          if (err) {
-            return done(err);
-          }
+      async (memberId, password, done) => {
+        console.log("jjoj");
+        try {
+          let user = await DBForUser.findUserById(memberId);
 
           if (user.password == password) {
             return done(null, user, {
               message: "Logged In Successfully"
-            })
+            });
           }
           return done(null, false, {
             message: "Incoreect memberID or password"
           });
-        });
+        } catch (err) {
+          return done(err);
+        }
       }
     )
   );
