@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true
         },
         today: {
-            type: DataTypes.DATE,
+            type: DataTypes.STRING(10),
             allowNull: false
         },
         memberId: {
