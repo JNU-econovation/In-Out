@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "password": "1111",
+    "password": "zz1356",
     "database": "inandout",
     "host": "127.0.0.1",
     "dialect": "mysql",

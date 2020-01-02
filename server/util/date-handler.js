@@ -1,8 +1,7 @@
 const SUNDAY_CODE = 0;
 const SATURDAY_CODE = 6;
 
-const isWeekend = () => {
-    let date = new Date();
+const isWeekend = (date) => {
     let today = date.getDay();
 
     if (today == SATURDAY_CODE || today == SUNDAY_CODE) {
@@ -12,42 +11,33 @@ const isWeekend = () => {
     }
 }
 
-const isInTime = () => {
-    let now = new Date();
-    let startTime = setStartTime(now);
-    let endTime = setEndTime(now);
+const isInTime = (now) => {
+    let startTime = setTime(8);
+    let endTime = setTime(20);
     let time = now.getTime();
 
-    if (time > startTime && time < endTime) {
+    if (time > startTime.getTime() && time < endTime.getTime()) {
         return true;
     } else {
         return false;
     }
-
 }
 
-const setStartTime = (date) => {
+const setTime = (time) => {
+    let date = new Date();
+    date.setHours(time);
+    date.setMinutes(0);
+    date.setSeconds(0);
+
+    return date;
+}
+
+const getFormatDate = (date) => {
     let year = date.getFullYear();
-    let month = date.getMonth();
-    let day = date.getDay();;
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
 
-    return new Date(year, month, day, 8, 0, 0);
-}
-
-const setEndTime = (date) => {
-    let year = date.getFullYear();
-    let month = date.getMonth();
-    let day = date.getDay();
-
-    return new Date(year, month, day, 20, 0, 0);
-}
-
-const getFormatDate = (Date) => {
-    let year = Date.getFullYear();
-    let month = Date.getMonth() + 1;
-    let date = Date.getDate();
-
-    return [year, month, date].join('-');
+    return [year, month, day].join('-');
 };
 
 module.exports = {

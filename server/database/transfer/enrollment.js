@@ -1,20 +1,24 @@
 const database = require('./../models');
 
+exports.createEnrollment = async (enroll) => {
+    console.log(enroll);
 
-exports.createEnrollments = async (enroll) => {
     try {
-        return await database.sequelize.transaction().then(async (transaction) => {
-            return await database.Enrollment.create({
-                today: enroll.today,
-                reason: enroll.reason,
-                memberId: enroll.memberId
-            }, {
-                transaction: transaction
-            })
+        const transaction = await database.sequelize.transaction();
+
+        const result = await database.Enrollment.create({
+            today: enroll.today,
+            reason: enroll.reason,
+            userMemberId: enroll.memberId
+        }, {
+            transaction: transaction
         });
+        await transaction.commit();
+
+        return result;
+
     } catch (err) {
         console.log(err);
-
     }
 }
 
