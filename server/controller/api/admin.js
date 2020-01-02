@@ -1,15 +1,17 @@
 const DBForUser = require('./../../database/transfer/user');
 
-exports.createUser = (req, res) => {
-    DBForUser.insertUser(req.body, (err, result) => {
-        if (err) {
-            return res.status(400).json({
-                message: "데이터를 저장하지 못하거나 db 연결실패"
-            });
-        }
+exports.createUser = async (req, res) => {
+
+    try {
+        let result = await DBForUser.insertUser(req.body);
+        console.log(result);
 
         return res.send(result);
-    });
+    } catch {
+        return res.status(400).json({
+            message: "데이터를 저장하지 못하거나 db 연결실패"
+        });
+    }
 }
 
 exports.isAdmin = (req, res, next) => {

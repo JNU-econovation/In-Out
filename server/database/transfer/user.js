@@ -1,18 +1,16 @@
 const database = require('./../models');
 
-exports.insertUser = (user, callback) => {
-    database.User.create({
+exports.insertUser = async (user, callback) => {
+    try {
+        return await database.User.create({
             memberId: user.memberId,
             name: user.name,
             password: user.password,
             role: user.role
-        })
-        .then(result => {
-            callback(null, result);
-        })
-        .catch(err => {
-            callback(err, null);
         });
+    } catch (err) {
+        console.log(err);
+    }
 }
 
 exports.findUserById = (memberId, callback) => {
@@ -56,7 +54,7 @@ exports.changePassword = (memberId, changedPassword, callback) => {
             }
         }, {
             transaction: transaction
-        }).then((role) => {
+        }).then(() => {
             callback(null, "ok");
         }).catch(err => {
             callback(err)
