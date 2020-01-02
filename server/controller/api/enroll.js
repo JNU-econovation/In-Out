@@ -1,15 +1,15 @@
 const models = require('../../database/models');
 const dateHandler = require('../../util/date-handler');
+const formatter = require('../../util/formatter');
+const enrollmentRepository = require('../../database/transfer/enrollment');
 
 const showEnrollmentsByDate = async (req, res) => {
     try {
-        const { date } = req.params.date;
-        const enrollments = await models.Enrollment.findAll({
-            where: { date }
-        });
+        let date = req.body.date;
+        const enrollments = await enrollmentRepository.getEnrollmentsByDate(date);
     
         return res.status(200).json({
-            results: enrollments
+            enrollments
           });
 
     } catch (error) {
@@ -23,14 +23,14 @@ const showEnrollmentsByDate = async (req, res) => {
 
 const showEnrollment = async (req, res) => {
     try {
-        const { memberId } = req.params.memberId;
-        const enrollment = await models.Enrollment.findOne({
-            where: { memberId }
-        });
-    
+        let memberId = req.body.memberId;
+        let today = formatter.getFormatDate(new Date());
+        const enrollment = await enrollmentRepository.findTodayById(memberId, today);
+        
         return res.status(200).json({
             result: enrollment
           });
+
     } catch (error) {
         console.log('에러 ', error.message);
         return res.status(500).json({
@@ -41,8 +41,6 @@ const showEnrollment = async (req, res) => {
 }
 
 const createEnrollment = async (req, res) => {
-    let body = req.body;
-
     //평일 08:00 ~ 17:00가 아니거나 공휴일인 경우 출입 신청 불가 기능
     if (dateHandler.isWeekend()) {
         return res.status(403).json({
@@ -57,13 +55,16 @@ const createEnrollment = async (req, res) => {
     }
 
     try {
-        const enrollment = await models.Enrollment.create({
-            today: new Date().getDate(),
-            memberId: body.memberId,
-            reason: body.reason
-        });
+        const enrollment = new Enrollment();
+        enrollment.memberId = req.body.memberId;
+        enrollment.today = formatter.getFormatDate(new Date());
+        enrollment.reason = req.body.reason;
 
-        return res.status(200).json();
+        await enrollmentRepository.createEnrollments(enrollment);
+
+        return res.status(200).json({
+            
+        });
     } catch (error) {
         console.log('에러 ', error.message);
         return res.status(500).json({
@@ -74,8 +75,6 @@ const createEnrollment = async (req, res) => {
 }
 
 const updateEnrollment = async (req, res) => {
-    let body  = req.body;
-
     if (dateHandler.isWeekend()) {
         return res.status(403).json({
             message: '주말에는 출입 신청을 할 수 없습니다.'
@@ -88,13 +87,19 @@ const updateEnrollment = async (req, res) => {
         })
     }
 
-    const enrollment = await models.Enrollment.update({
-
-    })
+    try {
+        await enrollmentRepository.changeReason(req.body.memberId, req.body.reason);
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message,
+            error: error
+        })
+    }
 }
 
 module.exports = {
     showEnrollmentsByDate,
     showEnrollment,
-    createEnrollment
+    createEnrollment,
+    updateEnrollment
 }
