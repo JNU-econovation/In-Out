@@ -45,21 +45,20 @@ exports.changeRole = async (memberId, role) => {
     }
 }
 
-exports.changePassword = (memberId, changedPassword, callback) => {
-    database.sequelize.transaction().then((transaction) => {
-        return database.User.update({
-            password: changedPassword
-        }, {
-            where: {
-                memberId: memberId
-            }
-        }, {
-            transaction: transaction
-        }).then(() => {
-            callback(null, "ok");
-        }).catch(err => {
-            callback(err)
-        })
-
-    });
+exports.changePassword = async (memberId, changedPassword) => {
+    try {
+        return await sequelize.transaction(async (transaction) => {
+            return await database.User.update({
+                password: changedPassword
+            }, {
+                where: {
+                    memberId: memberId
+                }
+            }, {
+                transaction: transaction
+            });
+        });
+    } catch (err) {
+        console.log(err);
+    }
 }
