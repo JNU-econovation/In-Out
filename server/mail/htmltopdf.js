@@ -1,15 +1,8 @@
 const fs = require('fs');
 const pdf = require('html-pdf');
-const enrollmentsRepository = require('./../database/transfer/enrollment');
+const dateHandler = require('./../util/date-handler');
 
-const getData = async () => {
-    try {
-        return await enrollmentsRepository.findAllWithReason('2020-1-2')
-    } catch (err) {
-        console.log(err);
-    }
-};
-
+const now = new Date();
 let data = `<!DOCTYPE html>
 <html lang="en">
 
@@ -41,7 +34,7 @@ let data = `<!DOCTYPE html>
     <h1 style="text-align: center; margin-top: 60px;">정보 전산원 야간 출입 신청서</h1>
     <div style="margin:100px; margin-top: 50px;">
         <div><strong>소속 : EOCONOVATION</strong><br>
-            <strong>야간 출입 : </strong> <span id=date></span><br>
+            <strong>출입 일시 : </strong> <span id=date>${dateHandler.getFormatDate(now)}</span><span> (${dateHandler.getDayToStr(now)}) 21:00 ~ 24:00</span> <br>
             <strong>목적 : 성과발표회 팀프로젝트 개발 </strong>
         </div>
         <br>
@@ -54,19 +47,30 @@ let data = `<!DOCTYPE html>
                     <th style="width: 150px;">비고</th>
                 </tr>`;
 
-exports.toPdf = async () => {
+exports.toPdf = async (results) => {
     try {
-        const enrolls = await getData();
+        const enrolls = results;
         const remain = 18 - enrolls.length;
 
         for (var i = 0; i < enrolls.length; i++) {
+
             let tmp = enrolls[i].dataValues;
-            data += `<tr>
-        <td>${i+1}</td>
-        <td>${tmp.userMemberId}</td>
-        <td>${tmp.reason}</td>
-        <td></td>
-    </tr>`
+            if (tmp.user) {
+                data += `<tr>
+                    <td>${i+1}</td>
+                    <td>${tmp.user.dataValues.name}</td>
+                    <td>${tmp.reason}</td>
+                    <td></td>
+                </tr>`
+            } else {
+
+                data += `<tr>
+                    <td>${i+1}</td>
+                    <td></td>
+                    <td>${tmp.reason}</td>
+                    <td></td>
+                </tr>`
+            }
         }
 
         for (var i = enrolls.length; i < enrolls.length + remain; i++) {
@@ -86,6 +90,7 @@ exports.toPdf = async () => {
 </div>
 </body>
 </html>`
+
         fs.writeFileSync('./application.html', data, 'utf-8');
 
         const html = fs.readFileSync('./application.html', 'utf-8');
@@ -93,10 +98,9 @@ exports.toPdf = async () => {
             "format": "a3"
         };
 
-        pdf.create(html, option).toFile('./tester.pdf', (err, info) => {
+        pdf.create(html, option).toFile('./enrollment.pdf', (err, info) => {
             if (err) throw err;
             console.log("pdf 변환됨.");
-
         });
     } catch (err) {
         console.log(err);
