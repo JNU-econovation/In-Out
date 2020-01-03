@@ -49,7 +49,7 @@ exports.changePassword = async (memberId, changedPassword) => {
     try {
         const transaction = await database.sequelize.transaction();
         await database.User.update({
-            password: this.changePassword
+            password: changedPassword
         }, {
             where: {
                 memberId: memberId

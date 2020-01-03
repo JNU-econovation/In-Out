@@ -76,3 +76,16 @@ exports.findTodayById = async (memberId, today) => {
         console.log(err);
     }
 }
+
+exports.findAllWithReason = async (date) => {
+    try {
+        return await database.Enrollment.findAll({
+            include: [{
+                model: database.User,
+                require: true
+            }]
+        });
+    } catch (err) {
+        console.log(err);
+    }
+}
