@@ -82,8 +82,12 @@ exports.findAllWithReason = async (date) => {
         return await database.Enrollment.findAll({
             include: [{
                 model: database.User,
+
                 require: true
-            }]
+            }],
+            where: {
+                today: date
+            }
         });
     } catch (err) {
         console.log(err);
