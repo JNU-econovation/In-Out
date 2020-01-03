@@ -1,24 +1,25 @@
 const nodemailer = require('nodemailer');
-const dateHandler = require('../util/date-handler');
+const dateHandler = require('./../util/date-handler');
+const emailConfig = require("./../config/mailconfig.json");
 
 const now = new Date();
 const transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
-        user: 'econovation.kr@gmail.com',
-        pass: 'ecnv2019'
+        user: emailConfig.senderEmail,
+        pass: emailConfig.senderPassword
     },
 });
 
 
 const mailOptions = {
-    from: 'jbj616@mail.com',
-    to: 'jbj616@naver.com',
+    from: emailConfig.senderEmail,
+    to: emailConfig.receiverEmail,
     subject: `${dateHandler.getFormatDate(now)} 출입 신청 내역`,
     html: 'data',
     attachments: [{
-        filename: '출입신청.pdf',
-        path: './tester.pdf',
+        filename: dateHandler.getFormatDate(now) + '출입신청.pdf',
+        path: './enrollment.pdf',
         contentType: 'application/pdf'
     }]
 }
