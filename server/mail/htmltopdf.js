@@ -54,30 +54,31 @@ let data = `<!DOCTYPE html>
                     <th style="width: 150px;">비고</th>
                 </tr>`;
 
-exports.toPdf = (callback) => getData().then((enrolls) => {
-    var remain = 18 - enrolls.length;
+exports.toPdf = async () => {
+    try {
+        const enrolls = await getData();
+        const remain = 18 - enrolls.length;
 
-    for (var i = 0; i < enrolls.length; i++) {
-        var tmp = enrolls[i].dataValues;
-        data += `<tr>
+        for (var i = 0; i < enrolls.length; i++) {
+            let tmp = enrolls[i].dataValues;
+            data += `<tr>
         <td>${i+1}</td>
         <td>${tmp.userMemberId}</td>
         <td>${tmp.reason}</td>
         <td></td>
     </tr>`
-    }
+        }
 
-    for (var i = enrolls.length; i < enrolls.length + remain; i++) {
-        data += `<tr>
+        for (var i = enrolls.length; i < enrolls.length + remain; i++) {
+            data += `<tr>
         <td>${i+1}</td>
         <td></td>
         <td></td>
         <td></td>
     </tr>`
-    }
+        }
 
-    data += `</table>
-
+        data += `</table>
 </div>
 </div>
 <div style="text-align: right; margin-top: -50px; margin-right: 100px; margin-bottom: 40px;">
@@ -85,14 +86,19 @@ exports.toPdf = (callback) => getData().then((enrolls) => {
 </div>
 </body>
 </html>`
-    fs.writeFileSync('./application.html', data, 'utf-8');
+        fs.writeFileSync('./application.html', data, 'utf-8');
 
-    var html = fs.readFileSync('./application.html', 'utf-8');
-    var option = {
-        "format": "a3"
-    };
-    pdf.create(html, option).toFile('./tester.pdf', function (err, res) {
-        if (err) callback(err, null);
-        callback(null, "ok")
-    });
-})
+        const html = fs.readFileSync('./application.html', 'utf-8');
+        const option = {
+            "format": "a3"
+        };
+
+        pdf.create(html, option).toFile('./tester.pdf', (err, info) => {
+            if (err) throw err;
+            console.log("pdf 변환됨.");
+
+        });
+    } catch (err) {
+        console.log(err);
+    }
+}

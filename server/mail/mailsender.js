@@ -23,14 +23,12 @@ const mailOptions = {
     }]
 }
 
-exports.sendMail = (callback) => transporter.sendMail(mailOptions, (err, info) => {
-    if (err) {
-        callback(err, null)
-    } else {
-        console.log((`send: ${info.response}`));
+exports.sendMail = async () => {
+    try {
+        await transporter.sendMail(mailOptions);
+        transporter.close();
+        console.log(new Date() + '- mail success');
+    } catch (err) {
+        console.log("mail fail");
     }
-
-    transporter.close();
-
-    callback(null, "ok");
-})
+}
