@@ -4,7 +4,7 @@ const enrollmentsRepository = require('./../database/transfer/enrollment');
 
 const getData = async () => {
     try {
-        return await enrollmentsRepository.getEnrollmentsByDate('2020-1-2')
+        return await enrollmentsRepository.findAllWithReason('2020-1-2')
     } catch (err) {
         console.log(err);
     }
