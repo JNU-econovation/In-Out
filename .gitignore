@@ -25,3 +25,5 @@ yarn-error.log*
 starter.sh
 server/public/**
 node_modules
+server/config/*.json
+
