@@ -1,6 +1,6 @@
-var express = require("express");
-var router = express.Router();
-var userController = require("../../controller/api/user");
+const express = require("express");
+const router = express.Router();
+const userController = require("../../controller/api/user");
 
 router.put("/update", userController.updatePassword);
 

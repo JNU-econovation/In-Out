@@ -1,19 +1,21 @@
 const database = require("./../models");
 
-exports.insertUser = async user => {
+const insertUser = async user => {
   try {
+    const { memberId, name, password, role } = user;
+
     return await database.User.create({
-      memberId: user.memberId,
-      name: user.name,
-      password: user.password,
-      role: user.role
+      memberId,
+      name,
+      password,
+      role
     });
   } catch (err) {
     console.log(err);
   }
 };
 
-exports.findUserById = async memberId => {
+const findUserById = async memberId => {
   try {
     let user = await database.User.findOne({
       where: {
@@ -27,7 +29,7 @@ exports.findUserById = async memberId => {
   }
 };
 
-exports.changeRole = async (memberId, role) => {
+const changeRole = async (memberId, role) => {
   try {
     const transaction = await database.sequelize.transaction();
     await database.User.update(
@@ -49,7 +51,7 @@ exports.changeRole = async (memberId, role) => {
   }
 };
 
-exports.changePassword = async (memberId, changedPassword) => {
+const changePassword = async (memberId, changedPassword) => {
   try {
     const transaction = await database.sequelize.transaction();
     await database.User.update(
@@ -69,4 +71,11 @@ exports.changePassword = async (memberId, changedPassword) => {
   } catch (err) {
     console.log(err);
   }
+};
+
+module.exports = {
+  changePassword,
+  changeRole,
+  findUserById,
+  insertUser
 };

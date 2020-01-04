@@ -1,16 +1,17 @@
-var createError = require("http-errors");
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
-var mysql = require("mysql");
+const createError = require("http-errors");
+const express = require("express");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
+const mysql = require("mysql");
 const bodyParser = require("body-parser");
 const passport = require("passport");
+
 const passportConfig = require("./config/passport");
 const db = require("./database/connectionDB");
+const indexRouter = require("./routes/index");
 
-var indexRouter = require("./routes/index");
-var app = express();
+const app = express();
 
 app.use(logger("dev"));
 app.use(express.json());

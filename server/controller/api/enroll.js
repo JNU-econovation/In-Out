@@ -3,7 +3,7 @@ const enrollmentRepository = require("../../database/transfer/enrollment");
 
 const showEnrollmentsByDate = async (req, res) => {
   try {
-    let date = req.query.date;
+    const date = req.query.date;
     const enrollments = await enrollmentRepository.getEnrollmentsByDate(date);
 
     return res.status(200).json({
@@ -19,9 +19,8 @@ const showEnrollmentsByDate = async (req, res) => {
 };
 
 const showEnrollment = async (req, res) => {
-  let memberId = req.query.memberId;
-  let today = dateHandler.getFormatDate(new Date());
-  console.log(today);
+  const memberId = req.query.memberId;
+  const today = dateHandler.getFormatDate(new Date());
 
   try {
     const enrollment = await enrollmentRepository.findTodayById(
