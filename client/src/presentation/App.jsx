@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { MyPage } from "./pages/mypage";
 import { theme } from "./theme/theme";
 import Login from "./pages/home/login";
@@ -22,7 +23,20 @@ function App() {
     <Fragment>
       <ThemeProvider theme={theme}>
         <Global></Global>
-        <Register />
+        <Router>
+          <Switch>
+            <Route path="/login">
+              <Login></Login>
+            </Route>
+            <Route path="/register">
+              <Register></Register>
+            </Route>
+            <Route path="/my">
+              <MyPage />
+            </Route>
+            <Route path="/admin"></Route>
+          </Switch>
+        </Router>
       </ThemeProvider>
     </Fragment>
   );
