@@ -2,10 +2,35 @@ const userRepository = require("../../database/transfer/user");
 const bcrypt = require("bcryptjs");
 
 const updatePassword = async (req, res) => {
-  const encryptedPassoword = await encryptPassword(req.body.changedPassword);
+  const memberId = await req.body.memberId;
+  const oldPasswword = await req.body.oldPassword;
+  const newPassword = await req.body.newPassword;
+  const newPasswordForCheck = await req.body.newPasswordForCheck;
+  const encryptedPassoword = await encryptPassword(newPassword);
 
   try {
-    await userRepository.changePassword(req.body.memberId, encryptedPassoword);
+    const user = await userRepository.findUserById(memberId);
+    await bcrypt.compare(oldPasswword, user.password).then(matching => {
+      if (matching) {
+        if (newPassword !== newPasswordForCheck) {
+          return res.status(403).json({
+            message: "변경할 비밀번호가 일치하지 않습니다."
+          });
+        }
+
+        if (oldPasswword === newPassword) {
+          return res.status(403).json({
+            message: "변경할 비밀번호가 기존 바밀번호와 동일합니다."
+          });
+        }
+
+        userRepository.changePassword(memberId, encryptedPassoword);
+      } else {
+        return res.status(403).json({
+          message: "기존 비밀번호가 일치하지 않습니다."
+        });
+      }
+    });
   } catch (error) {
     console.log("에러 ", error.message);
     res.status(403).json({

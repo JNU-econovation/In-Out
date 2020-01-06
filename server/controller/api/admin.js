@@ -1,6 +1,10 @@
 const DBForUser = require("./../../database/transfer/user");
+const bcrypt = require("bcryptjs");
 
 const createUser = async (req, res) => {
+  let user = req.body;
+  user.password = encryptPassword(user.password);
+
   try {
     const result = await DBForUser.insertUser(req.body);
     return res.send(result);
@@ -42,6 +46,12 @@ const changeRole = async (req, res) => {
   } catch (err) {
     return res.status(400);
   }
+};
+
+const encryptPassword = password => {
+  const salt = bcrypt.genSaltSync(10);
+  console.log(bcrypt.hashSync(password, salt));
+  return bcrypt.hashSync(password, salt);
 };
 
 module.exports = {
