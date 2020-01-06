@@ -82,7 +82,10 @@ const createEnrollment = async (req, res) => {
 
 const updateEnrollment = async (req, res) => {
   const now = new Date();
-  if (dateHandler.isWeekend(now)) {
+  if (
+    dateHandler.isWeekend(now) ||
+    dateHandler.isHoliday(dateHandler.getFormatDate(now))
+  ) {
     return res.status(403).json({
       message: "주말에는 출입 신청을 할 수 없습니다."
     });
