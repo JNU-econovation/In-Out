@@ -9,5 +9,4 @@ class AxiosWrapper {
     return this.axios.create();
   }
 }
-const axioswrapper = new AxiosWrapper();
-export default axioswrapper;
+export const axioswrapper = new AxiosWrapper();
