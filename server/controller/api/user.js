@@ -14,7 +14,8 @@ const updatePassword = async (req, res) => {
       if (matching) {
         if (newPassword !== newPasswordForCheck) {
           return res.status(403).json({
-            message: "변경할 비밀번호가 일치하지 않습니다."
+            message: "변경할 비밀번호가 일치하지 않습니다.",
+            errCode: "23"
           });
         }
 
@@ -27,14 +28,16 @@ const updatePassword = async (req, res) => {
         userRepository.changePassword(memberId, encryptedPassoword);
       } else {
         return res.status(403).json({
-          message: "기존 비밀번호가 일치하지 않습니다."
+          message: "기존 비밀번호가 일치하지 않습니다.",
+          errCode: "20"
         });
       }
     });
   } catch (error) {
     console.log("에러 ", error.message);
     res.status(403).json({
-      message: error.message
+      message: error.message,
+      errCode: "14"
     });
   }
 

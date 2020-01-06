@@ -15,7 +15,6 @@ module.exports = () => {
         passwordField: "password"
       },
       async (memberId, password, done) => {
-        console.log("jjoj");
         try {
           let user = await DBForUser.findUserById(memberId);
 
@@ -25,7 +24,8 @@ module.exports = () => {
             });
           }
           return done(null, false, {
-            message: "Incoreect memberID or password"
+            message: "Incoreect memberID or password",
+            errCode: "20"
           });
         } catch (err) {
           return done(err);
@@ -53,7 +53,8 @@ module.exports = () => {
             });
           }
           return done(null, false, {
-            message: "Incoreect memberID or password"
+            message: "Incoreect memberID or password",
+            errCode: "20"
           });
         });
       }
