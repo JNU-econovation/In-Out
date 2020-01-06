@@ -1,11 +1,6 @@
-var fs = require('fs');
-
+const path = require("path");
 module.exports = {
-  getIndexPage: (req, res)=>{
-    fs.readFile('/index.html', (err, data) => {
-      if(err) console.log('index.html 파일을 읽지 못하였습니다.');
-
-      res.end(data);
-    });
+  getIndexPage: (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../public", "index.html"));
   }
-}
+};
