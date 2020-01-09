@@ -15,7 +15,6 @@ module.exports = () => {
         passwordField: "password"
       },
       async (memberId, password, done) => {
-        console.log("jjoj");
         try {
           let user = await DBForUser.findUserById(memberId);
 

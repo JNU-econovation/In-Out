@@ -20,7 +20,6 @@ const updatePassword = async (req, res) => {
 
 const encryptPassword = password => {
   const salt = bcrypt.genSaltSync(10);
-  console.log(bcrypt.hashSync(password, salt));
   return bcrypt.hashSync(password, salt);
 };
 

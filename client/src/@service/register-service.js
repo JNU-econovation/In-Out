@@ -34,7 +34,6 @@ RegisterService.prototype.get = async function() {
     const storage = this.storage.get();
     const { memberId } = jwt.decode(storage.token);
     const result = await this.registerApi.get(memberId);
-    console.log(result);
     return result;
   } catch (error) {
     throw error;
