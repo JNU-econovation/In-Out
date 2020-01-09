@@ -19,15 +19,14 @@ const showEnrollmentsByDate = async (req, res) => {
 };
 
 const showEnrollment = async (req, res) => {
-  const memberId = req.query.memberId;
+  const userMemberId = req.params.memberId;
   const today = dateHandler.getFormatDate(new Date());
-
+  console.log(userMemberId);
   try {
     const enrollment = await enrollmentRepository.findTodayById(
-      memberId,
+      userMemberId,
       today
     );
-
     return res.status(200).json({
       result: enrollment
     });
@@ -44,6 +43,7 @@ const createEnrollment = async (req, res) => {
   //평일 08:00 ~ 17:00가 아니거나 공휴일인 경우 출입 신청 불가 기능
   const memberId = req.body.memberId;
   const reason = req.body.reason;
+  console.log(memberId);
   const now = new Date();
   let result;
 
