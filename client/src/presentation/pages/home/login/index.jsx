@@ -1,14 +1,25 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Service } from "service";
+import { Service } from "@service";
+import { useHistory, useLocation } from "react-router-dom";
+import { useAuthDispatch } from "data/context/auth-context";
 
 const Login = props => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
+  const authDispatch = useAuthDispatch();
+  let history = useHistory();
+  let location = useLocation();
+
+  let { from } = location.state || { from: { pathname: "/" } };
 
   const login = async function() {
     try {
       await Service.authService.login(id, password);
+      authDispatch({
+        type: "LOGIN"
+      });
+      history.replace(from);
     } catch (error) {
       alert(error.message);
     }
