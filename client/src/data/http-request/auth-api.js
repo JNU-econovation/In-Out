@@ -4,9 +4,11 @@ const Auth = function(axioswrapper) {
   this.axios = axioswrapper;
 };
 
-Auth.prototype.login = async function(id, password) {
+Auth.prototype.login = async function(memberId, password) {
   try {
-    return await this.axios.getAxios().post("/api/login", { id, password });
+    return await this.axios
+      .getAxios()
+      .post("/api/login", { memberId, password });
   } catch (error) {
     throw error;
   }

@@ -7,7 +7,11 @@ BrowserStorageMapper.prototype.toJson = function(value) {
 };
 
 BrowserStorageMapper.prototype.toString = function(value) {
-  return JSON.stringify(value);
+  const result = Object.keys(this.entity).reduce((pre, cur) => {
+    pre[cur] = value;
+    return pre;
+  }, {});
+  return JSON.stringify(result);
 };
 
 export { BrowserStorageMapper };

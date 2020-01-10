@@ -16,7 +16,7 @@ BrowserStorage.prototype.get = function() {
 };
 
 BrowserStorage.prototype.remove = function() {
-  this.helper.clear(key);
+  this.helper.clear(this.key);
 };
 
 export { BrowserStorage };

@@ -3,7 +3,6 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
-const mysql = require("mysql");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 
@@ -21,7 +20,7 @@ app.use(
   })
 );
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "/public")));
 app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
@@ -35,11 +34,11 @@ passportConfig();
 //connection DB
 db.connect();
 
-app.use("/", indexRouter);
 app.use("/api", require("./routes/api/auth"));
 app.use("/api/admin", require("./routes/api/admin"));
 app.use("/api/enrollments", require("./routes/api/enroll"));
 app.use("/api/mypage", require("./routes/api/user"));
+app.use(indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -54,7 +53,8 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render("error");
+  console.error(error);
+  res.send(error.message);
 });
 
 module.exports = app;
