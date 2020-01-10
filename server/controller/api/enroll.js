@@ -10,10 +10,9 @@ const showEnrollmentsByDate = async (req, res) => {
       enrollments
     });
   } catch (error) {
-    console.log("에러 ", error.message);
     return res.status(500).json({
       message: error.message,
-      error: error
+      errCode: "14"
     });
   }
 };
@@ -35,7 +34,7 @@ const showEnrollment = async (req, res) => {
     console.log("에러 ", error.message);
     return res.status(500).json({
       message: error.message,
-      error: error
+      errCode: "14"
     });
   }
 };
@@ -47,15 +46,20 @@ const createEnrollment = async (req, res) => {
   const now = new Date();
   let result;
 
-  if (dateHandler.isWeekend(now)) {
+  if (
+    dateHandler.isWeekend(now) ||
+    dateHandler.isHoliday(dateHandler.getFormatDate(now))
+  ) {
     return res.status(403).json({
-      message: "주말에는 출입 신청을 할 수 없습니다."
+      message: "주말에는 출입 신청을 할 수 없습니다.",
+      errCode: "30"
     });
   }
 
   if (!dateHandler.isInTime(now)) {
     return res.status(403).json({
-      message: "출입 신청은 당일 08:00 ~ 17:00 사이에만 신청 가능합니다."
+      message: "출입 신청은 당일 08:00 ~ 17:00 사이에만 신청 가능합니다.",
+      errCode: "31"
     });
   }
 
@@ -71,7 +75,7 @@ const createEnrollment = async (req, res) => {
     console.log("에러 ", error.message);
     return res.status(500).json({
       message: error.message,
-      error: error
+      errCode: "11"
     });
   }
   return res.status(200).json({
@@ -87,13 +91,15 @@ const updateEnrollment = async (req, res) => {
     dateHandler.isHoliday(dateHandler.getFormatDate(now))
   ) {
     return res.status(403).json({
-      message: "주말에는 출입 신청을 할 수 없습니다."
+      message: "주말에는 출입 신청을 할 수 없습니다.",
+      errCode: "30"
     });
   }
 
   if (!dateHandler.isInTime(now)) {
     return res.status(403).json({
-      message: "출입 신청은 당일 08:00 ~ 17:00 사이에만 신청 가능합니다."
+      message: "출입 신청은 당일 08:00 ~ 17:00 사이에만 신청 가능합니다.",
+      errCode: "31"
     });
   }
 
@@ -102,7 +108,7 @@ const updateEnrollment = async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       message: error.message,
-      error: error
+      errCode: "13"
     });
   }
   return res.status(200).json({

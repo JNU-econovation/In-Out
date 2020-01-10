@@ -10,8 +10,9 @@ login = (req, res) => {
     },
     (err, user) => {
       if (err || !user) {
-        return res.status(400).json({
-          message: "Something is not right"
+        return res.status(500).json({
+          message: "Something is not right",
+          errCode: "22"
         });
       }
 
@@ -22,8 +23,9 @@ login = (req, res) => {
         },
         err => {
           if (err) {
-            return res.status(400).json({
-              message: "login Fail"
+            return res.status(403).json({
+              message: "login Fail",
+              errCode: "20"
             });
           }
 
@@ -51,7 +53,12 @@ verifyToken = (req, res, next) => {
     req.user = decoded;
     next();
   } else {
-    res.status(403).send("인증 안됨.");
+    res.status(403).send(
+      json({
+        message: "인증을 하지 못하였습니다.",
+        errCode: "22"
+      })
+    );
   }
 };
 
