@@ -68,9 +68,35 @@ const getDayToStr = date => {
   }
 };
 
+//2020 기준 휴일 정보
+const isHoliday = date => {
+  const holiday = [
+    "2020-1-1",
+    "2020-1-24",
+    "2020-1-25",
+    "2020-1-26",
+    "2020-1-27",
+    "2020-3-1",
+    "2020-4-15",
+    "2020-4-30",
+    "2020-5-5",
+    "2020-6-6",
+    "2020-8-15",
+    "2020-9-30",
+    "2020-10-1",
+    "2020-10-2",
+    "2020-10-3",
+    "2020-10-9",
+    "2020-12-25"
+  ];
+
+  return holidays.includes(date);
+};
+
 module.exports = {
   isWeekend,
   isInTime,
   getFormatDate,
-  getDayToStr
+  getDayToStr,
+  isHoliday
 };
