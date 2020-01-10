@@ -20,25 +20,38 @@ const valueToNumber = {
 
 const Register = () => {
   const [selectedOption, setSelectedOption] = useState(null);
+  const [isAlreadyEnrole, setIsAlreadyEnrole] = useState(false);
   const handleChange = selectedOption => {
     setSelectedOption(selectedOption);
   };
 
   useEffect(() => {
     checkEnrollmentAlready();
-  }, [setSelectedOption]);
+  }, [setSelectedOption, setIsAlreadyEnrole]);
 
   const checkEnrollmentAlready = async () => {
     try {
       const { status, data } = await Service.registerService.get();
       const { result } = data;
       const { reason } = result;
-      console.log(reason);
-      if (status !== 200) return;
+      if (status !== 200) {
+        setIsAlreadyEnrole(false);
+        return;
+      }
       setSelectedOption({
         value: reason,
         label: options[valueToNumber[reason]].label
       });
+      setIsAlreadyEnrole(true);
+    } catch (error) {}
+  };
+
+  const onUpdate = async () => {
+    try {
+      const result = await Service.registerService.update(selectedOption.value);
+      if (result.status === 200) {
+        checkEnrollmentAlready();
+      }
     } catch (error) {}
   };
 
@@ -78,7 +91,11 @@ const Register = () => {
           />
         </SelectBox>
       </NamedInputBox>
-      <button onClick={onSubmit}>Register</button>
+      {isAlreadyEnrole ? (
+        <button onClick={onUpdate}>Update</button>
+      ) : (
+        <button onClick={onSubmit}>Register</button>
+      )}
     </RegisterBox>
   );
 };
