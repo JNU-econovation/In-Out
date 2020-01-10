@@ -19,15 +19,13 @@ const showEnrollmentsByDate = async (req, res) => {
 };
 
 const showEnrollment = async (req, res) => {
-  const memberId = req.query.memberId;
+  const userMemberId = req.params.memberId;
   const today = dateHandler.getFormatDate(new Date());
-
   try {
     const enrollment = await enrollmentRepository.findTodayById(
-      memberId,
+      userMemberId,
       today
     );
-
     return res.status(200).json({
       result: enrollment
     });

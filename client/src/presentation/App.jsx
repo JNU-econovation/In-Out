@@ -17,7 +17,6 @@ function App() {
       type: "CHANGE",
       value: Service.authService.isLogined()
     });
-    console.log(auth);
   }, [authDispatch]);
 
   return (

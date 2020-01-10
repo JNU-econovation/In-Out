@@ -1,7 +1,7 @@
 const SUNDAY_CODE = 0;
 const SATURDAY_CODE = 6;
-const START_TIME = 8;
-const END_TIME = 20; // 임시 설정
+const START_TIME = 0;
+const END_TIME = 23; // 임시 설정
 
 const isWeekend = date => {
   const today = date.getDay();
@@ -30,6 +30,7 @@ const getStartTime = () => {
   date.setHours(START_TIME);
   date.setMinutes(0);
   date.setSeconds(0);
+  return date;
 };
 
 const getEndTime = () => {
@@ -37,6 +38,7 @@ const getEndTime = () => {
   date.setHours(END_TIME);
   date.setMinutes(0);
   date.setSeconds(0);
+  return date;
 };
 
 const getFormatDate = date => {
