@@ -70,7 +70,7 @@ const getDayToStr = date => {
 
 //2020 기준 휴일 정보
 const isHoliday = date => {
-  const holiday = [
+  const holidays = [
     "2020-1-1",
     "2020-1-24",
     "2020-1-25",
