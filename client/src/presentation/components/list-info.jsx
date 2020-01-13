@@ -13,11 +13,11 @@ export const ListInfoLabel = props => {
   );
 };
 
-export const ListInfoInput = ({ subject }) => {
+export const ListInfoInput = ({ subject, value, onChange }) => {
   return (
     <LineWrapper>
       <BlockLabel>{subject}</BlockLabel>
-      <BlockInput></BlockInput>
+      <BlockInput value={} onChange={onChange}></BlockInput>
     </LineWrapper>
   );
 };
