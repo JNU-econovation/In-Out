@@ -1,5 +1,6 @@
 import axios from "axios";
 import { BrowserStorage } from "data/browser-storage";
+
 class AxiosWrapper {
   constructor() {
     this.axios = axios;
