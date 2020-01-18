@@ -17,7 +17,7 @@ export const ListInfoInput = ({ subject, value, onChange }) => {
   return (
     <LineWrapper>
       <BlockLabel>{subject}</BlockLabel>
-      <BlockInput value={} onChange={onChange}></BlockInput>
+      <BlockInput value={value} onChange={onChange}></BlockInput>
     </LineWrapper>
   );
 };
