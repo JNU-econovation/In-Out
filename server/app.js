@@ -53,8 +53,8 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  console.error(error);
-  res.send(error.message);
+  console.error(err);
+  res.send(err.message);
 });
 
 module.exports = app;
