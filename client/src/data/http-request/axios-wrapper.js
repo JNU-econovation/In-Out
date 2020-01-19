@@ -1,5 +1,7 @@
 import axios from "axios";
 import { BrowserStorage } from "data/browser-storage";
+import { StorageType } from "enum/storage";
+import { tokenMapper } from "data/browser-storage/type-mapper/token-mapper";
 
 class AxiosWrapper {
   constructor() {
@@ -9,7 +11,7 @@ class AxiosWrapper {
 
   getAxios() {
     const storage = this.storage.get();
-    if (storage.token) return this.axios.create();
+    if (!storage || !storage.token) return this.axios.create();
     return this.axios.create({
       headers: {
         "x-access-token": storage.token

@@ -5,20 +5,13 @@ const UserService = function() {
 };
 
 UserService.prototype.updatePassword = async function(
-  memberId,
   oldPassword,
-  newPassword,
-  newPasswordForCheck
+  newPassword
 ) {
   try {
-    return await this.api.update(
-      memberId,
-      oldPassword,
-      newPassword,
-      newPasswordForCheck
-    );
+    return await this.api.update(oldPassword, newPassword);
   } catch (error) {
-    return "에러";
+    throw error;
   }
 };
 
