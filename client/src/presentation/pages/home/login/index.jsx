@@ -4,7 +4,7 @@ import { Service } from "@service";
 import { useHistory, useLocation } from "react-router-dom";
 import { useAuthDispatch } from "data/context/auth-context";
 
-const Login = props => {
+const Login = () => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const authDispatch = useAuthDispatch();
@@ -21,7 +21,7 @@ const Login = props => {
       });
       history.replace(from);
     } catch (error) {
-      alert(error.message);
+      alert(error.response.data.message);
     }
   };
 

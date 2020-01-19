@@ -18,7 +18,7 @@ module.exports = () => {
         try {
           let user = await DBForUser.findUserById(memberId);
 
-          if (bcrypt.compare(password, user.password)) {
+          if (await bcrypt.compare(password, user.password)) {
             return done(null, user, {
               message: "Logged In Successfully"
             });

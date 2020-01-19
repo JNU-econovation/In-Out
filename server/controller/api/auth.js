@@ -53,12 +53,10 @@ verifyToken = (req, res, next) => {
     req.user = decoded;
     next();
   } else {
-    res.status(403).send(
-      json({
-        message: "인증을 하지 못하였습니다.",
-        errCode: "22"
-      })
-    );
+    res.status(403).json({
+      message: "인증을 하지 못하였습니다.",
+      errCode: "22"
+    });
   }
 };
 

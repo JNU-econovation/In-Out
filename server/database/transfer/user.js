@@ -22,7 +22,6 @@ const findUserById = async memberId => {
         memberId: memberId
       }
     });
-
     return user.dataValues;
   } catch (err) {
     console.log(err);
