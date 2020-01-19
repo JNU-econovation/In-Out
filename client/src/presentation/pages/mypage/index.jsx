@@ -9,24 +9,27 @@ export const MyPage = () => {
   const [checkNewPassword, serCheckNewPassword] = useState("");
 
   const onChangePassword = e => {
-    setPassword(e.targer.value);
+    setPassword(e.target.value);
   };
 
   const onChangeNewPassword = e => {
-    setNewPassword(e.targer.value);
+    setNewPassword(e.target.value);
   };
 
   const onChangeCheckNewPassword = e => {
-    serCheckNewPassword(e.targer.value);
+    serCheckNewPassword(e.target.value);
   };
 
-  const changePassword = e => {
-    Service.userService.updatePassword(
-      1,
-      password,
-      newPassword,
-      checkNewPassword
-    );
+  const changePassword = async e => {
+    try {
+      const result = await Service.userService.updatePassword(
+        password,
+        newPassword
+      );
+      alert(result.data);
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   return (
@@ -48,7 +51,7 @@ export const MyPage = () => {
           onChange={onChangeCheckNewPassword}
           subject={"변경 비밀번호 확인"}
         ></ListInfoInput>
-        <button onClick={}>비밀번호 변경</button>
+        <button onClick={changePassword}>비밀번호 변경</button>
       </UpdateFrom>
     </StyledBox>
   );
