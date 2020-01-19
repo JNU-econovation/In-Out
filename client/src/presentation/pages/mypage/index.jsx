@@ -3,10 +3,11 @@ import styled from "styled-components";
 import { UpdateFrom } from "./update-form";
 import { ListInfoInput, ListInfoLabel } from "../../components/list-info";
 import { Service } from "@service";
+
 export const MyPage = () => {
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [checkNewPassword, serCheckNewPassword] = useState("");
+  const [newPasswordForCheck, setNewPasswordForCheck] = useState("");
 
   const onChangePassword = e => {
     setPassword(e.target.value);
@@ -17,10 +18,10 @@ export const MyPage = () => {
   };
 
   const onChangeCheckNewPassword = e => {
-    serCheckNewPassword(e.target.value);
+    setNewPasswordForCheck(e.target.value);
   };
 
-  const changePassword = async e => {
+  const changePassword = async () => {
     try {
       const result = await Service.userService.updatePassword(
         password,
@@ -47,7 +48,7 @@ export const MyPage = () => {
           subject={"변경 비밀번호"}
         ></ListInfoInput>
         <ListInfoInput
-          value={checkNewPassword}
+          value={newPasswordForCheck}
           onChange={onChangeCheckNewPassword}
           subject={"변경 비밀번호 확인"}
         ></ListInfoInput>

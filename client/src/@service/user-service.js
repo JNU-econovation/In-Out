@@ -9,10 +9,17 @@ UserService.prototype.updatePassword = async function(
   newPassword
 ) {
   try {
-    return await this.api.update(oldPassword, newPassword);
+    return await this.api.updatePassword(oldPassword, newPassword);
   } catch (error) {
     throw error;
   }
+};
+
+UserService.prototype.validatePasswordForCheck = function(
+  password,
+  passwordForCheck
+) {
+  return password === passwordForCheck;
 };
 
 export const userService = new UserService();
