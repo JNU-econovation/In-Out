@@ -21,3 +21,5 @@ UserService.prototype.updatePassword = async function(
     return "에러";
   }
 };
+
+export const userService = new UserService();

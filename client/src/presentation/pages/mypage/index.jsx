@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { UpdateFrom } from "./update-form";
 import { ListInfoInput, ListInfoLabel } from "../../components/list-info";
+import { Service } from "@service";
 export const MyPage = () => {
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -17,6 +18,15 @@ export const MyPage = () => {
 
   const onChangeCheckNewPassword = e => {
     serCheckNewPassword(e.targer.value);
+  };
+
+  const changePassword = e => {
+    Service.userService.updatePassword(
+      1,
+      password,
+      newPassword,
+      checkNewPassword
+    );
   };
 
   return (
@@ -38,6 +48,7 @@ export const MyPage = () => {
           onChange={onChangeCheckNewPassword}
           subject={"변경 비밀번호 확인"}
         ></ListInfoInput>
+        <button onClick={}>비밀번호 변경</button>
       </UpdateFrom>
     </StyledBox>
   );
