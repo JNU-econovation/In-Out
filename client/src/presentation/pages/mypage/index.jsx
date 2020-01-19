@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { UpdateFrom } from "./update-form";
 import { ListInfoInput, ListInfoLabel } from "../../components/list-info";
 import { Service } from "@service";
 
 export const MyPage = () => {
+  const buttonElement = useRef(null);
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [newPasswordForCheck, setNewPasswordForCheck] = useState("");
@@ -20,6 +21,20 @@ export const MyPage = () => {
   const onChangeCheckNewPassword = e => {
     setNewPasswordForCheck(e.target.value);
   };
+
+  const checkFull = useCallback(
+    (password, newPassword, newPasswordForCheck) => {
+      if (password && newPassword && newPasswordForCheck) {
+        return buttonElement.current.removeAttribute("disabled");
+      }
+      return buttonElement.current.setAttribute("disabled", "true");
+    },
+    []
+  );
+
+  useEffect(() => {
+    checkFull(password, newPassword, newPasswordForCheck);
+  }, [password, newPassword, newPasswordForCheck, checkFull]);
 
   const changePassword = async () => {
     try {
@@ -52,7 +67,9 @@ export const MyPage = () => {
           onChange={onChangeCheckNewPassword}
           subject={"변경 비밀번호 확인"}
         ></ListInfoInput>
-        <button onClick={changePassword}>비밀번호 변경</button>
+        <button ref={buttonElement} onClick={changePassword} disabled>
+          비밀번호 변경
+        </button>
       </UpdateFrom>
     </StyledBox>
   );
