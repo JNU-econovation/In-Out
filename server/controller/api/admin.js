@@ -1,4 +1,4 @@
-const DBForUser = require("./../../database/transfer/user");
+const userRepository = require("./../../database/transfer/user");
 const bcrypt = require("bcryptjs");
 
 const createUser = async (req, res) => {
@@ -6,7 +6,7 @@ const createUser = async (req, res) => {
   user.password = encryptPassword(user.password);
 
   try {
-    const result = await DBForUser.insertUser(req.body);
+    const result = await userRepository.insertUser(req.body);
     return res.send(result);
   } catch (err) {
     return res.status(500).json({
@@ -42,7 +42,7 @@ const changeRole = async (req, res) => {
   const roleForUpdate = req.body.role;
 
   try {
-    await DBForUser.changeRole(memberIdForUpdate, roleForUpdate);
+    await userRepository.changeRole(memberIdForUpdate, roleForUpdate);
 
     return res.status(200).json({
       role: roleForUpdate
