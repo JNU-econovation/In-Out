@@ -3,12 +3,14 @@ import styled from "styled-components";
 import { UpdateFrom } from "./update-form";
 import { ListInfoInput, ListInfoLabel } from "../../components/list-info";
 import { Service } from "@service";
+import { ErrorLabel } from "presentation/components/error-label";
 
 export const MyPage = () => {
   const buttonElement = useRef(null);
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [newPasswordForCheck, setNewPasswordForCheck] = useState("");
+  const [isconfirmedPassword, setIsConfirmedPassword] = useState(true);
 
   const onChangePassword = e => {
     setPassword(e.target.value);
@@ -20,6 +22,12 @@ export const MyPage = () => {
 
   const onChangeCheckNewPassword = e => {
     setNewPasswordForCheck(e.target.value);
+    if (
+      Service.userService.validatePasswordForCheck(newPassword, e.target.value)
+    ) {
+      return setIsConfirmedPassword(true);
+    }
+    return setIsConfirmedPassword(false);
   };
 
   const checkFull = useCallback(
@@ -67,7 +75,10 @@ export const MyPage = () => {
           onChange={onChangeCheckNewPassword}
           subject={"변경 비밀번호 확인"}
         ></ListInfoInput>
-        <button ref={buttonElement} onClick={changePassword} disabled>
+        {isconfirmedPassword ? null : (
+          <ErrorLabel>입력하신 비밀번호와 다릅니다.</ErrorLabel>
+        )}
+        <button ref={buttonElement} onClick={changePassword}>
           비밀번호 변경
         </button>
       </UpdateFrom>
