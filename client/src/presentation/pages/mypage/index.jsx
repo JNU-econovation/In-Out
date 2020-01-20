@@ -15,25 +15,24 @@ export const MyPage = () => {
   const onChangePassword = e => {
     setPassword(e.target.value);
   };
-
-  const onChangeNewPassword = e => {
-    setNewPassword(e.target.value);
+  
+  const checkConfirmedPassword = () =>{
     if (
       Service.userService.validatePasswordForCheck(newPassword, e.target.value)
     ) {
       return setIsConfirmedPassword(true);
     }
     return setIsConfirmedPassword(false);
+  }
+
+  const onChangeNewPassword = e => {
+    setNewPassword(e.target.value);
+    checkConfirmedPassword()
   };
 
   const onChangeCheckNewPassword = e => {
     setNewPasswordForCheck(e.target.value);
-    if (
-      Service.userService.validatePasswordForCheck(newPassword, e.target.value)
-    ) {
-      return setIsConfirmedPassword(true);
-    }
-    return setIsConfirmedPassword(false);
+    checkConfirmedPassword()
   };
 
   const checkFull = useCallback(
