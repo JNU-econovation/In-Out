@@ -18,6 +18,12 @@ export const MyPage = () => {
 
   const onChangeNewPassword = e => {
     setNewPassword(e.target.value);
+    if (
+      Service.userService.validatePasswordForCheck(newPassword, e.target.value)
+    ) {
+      return setIsConfirmedPassword(true);
+    }
+    return setIsConfirmedPassword(false);
   };
 
   const onChangeCheckNewPassword = e => {
