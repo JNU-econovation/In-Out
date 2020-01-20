@@ -60,7 +60,13 @@ verifyToken = (req, res, next) => {
   }
 };
 
+logout = (req, res) => {
+  req.logout();
+  res.redirect("/");
+};
+
 module.exports = {
   verifyToken,
-  login
+  login,
+  logout
 };
