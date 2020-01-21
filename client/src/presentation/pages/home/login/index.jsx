@@ -60,7 +60,7 @@ export default Login;
 const LoginBox = styled.section`
   box-sizing: border-box;
   display: flex;
-  padding: 10px;
+  padding: 8px;
   flex-direction: column;
   align-items: center;
   @media all and (max-width: 375px) {

@@ -37,7 +37,7 @@ export const ListInfoInput = ({
 
 const LineWrapper = styled.section`
   width: 90%;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -63,16 +63,16 @@ const LineWrapper = styled.section`
 const BlockLabel = styled.label`
   display: flex;
   align-items: center;
-  margin-right: 10px;
+  margin-right: 8px;
   width: auto;
   font-weight: 900;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 `;
 
 const BlockLabel2 = styled.label`
   display: flex;
   align-items: center;
-  margin-right: 10px;
+  margin-right: 8px;
   width: 100%;
   font-weight: bolder;
   font-size: ${({ theme }) => theme.mainFontSize};
@@ -85,9 +85,17 @@ const BlockLabelWrapper = styled.section`
 `;
 
 const BlockInput = styled.input`
+  box-sizing: border-box;
   display: inline-block;
   border: 1px solid black;
+  padding: 8px;
   width: 100%;
-  height: 30px;
+  height: 40px;
   font-size: ${({ theme }) => theme.mainFontSize};
+
+  :focus {
+    outline: none;
+    border-color: #203982;
+    border-width: 2px;
+  }
 `;

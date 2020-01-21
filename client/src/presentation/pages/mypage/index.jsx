@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { UpdateFrom } from "./update-form";
 import { ListInfoInput, ListInfoLabel } from "../../components/list-info";
@@ -16,12 +16,6 @@ export const MyPage = () => {
     setPassword(e.target.value);
   };
 
-  const checkConfirmedPassword = e => {
-    setIsConfirmedPassword(
-      userService.validatePasswordForCheck(newPassword, e.target.value)
-    );
-  };
-
   const onChangeNewPassword = e => {
     setNewPassword(e.target.value);
   };
@@ -30,8 +24,19 @@ export const MyPage = () => {
     setNewPasswordForCheck(e.target.value);
   };
 
+  useEffect(() => {
+    setIsConfirmedPassword(
+      userService.validatePasswordForCheck(newPassword, newPasswordForCheck)
+    );
+  }, [newPassword, newPasswordForCheck]);
+
   const checkFull = () => {
-    return !(password && newPassword && newPasswordForCheck);
+    return !(
+      password &&
+      newPassword &&
+      newPasswordForCheck &&
+      isconfirmedPassword
+    );
   };
 
   const changePassword = async () => {
@@ -67,18 +72,16 @@ export const MyPage = () => {
           <ListInfoInput
             value={newPassword}
             onChange={onChangeNewPassword}
-            onBlur={checkConfirmedPassword}
             subject={"변경 비밀번호"}
             inputType="password"
           ></ListInfoInput>
           <ListInfoInput
             value={newPasswordForCheck}
             onChange={onChangeCheckNewPassword}
-            onBlur={checkConfirmedPassword}
             subject={"변경 비밀번호 확인"}
             inputType="password"
           >
-            <div style={{ height: "10px" }}>
+            <div style={{ height: "16px", width: "100%" }}>
               <ErrorLabel>
                 {isconfirmedPassword ? "" : "입력하신 비밀번호와 다릅니다."}
               </ErrorLabel>
@@ -97,11 +100,11 @@ const Button = styled.button`
   width: 200px;
   border: 0;
   -webkit-appearance: none;
-  height: 30px;
+  height: 35px;
   background-color: #203982;
   color: white;
   font-weight: 600;
-  font-size: 10pt;
+  font-size: ${({ theme }) => theme.smallFontSize};
 
   :disabled {
     background-color: #20398290;
