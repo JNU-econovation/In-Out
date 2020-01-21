@@ -8,21 +8,31 @@ export const UpdateFrom = ({ children }) => {
 const UpdateFromWapper = styled.section`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  align-items: center;
   font-size: ${({ theme }) => theme.smallFontSize};
+  height: auto;
+  border-radius: 5px;
+  box-shadow: 0px 1px 5px grey;
+  padding: 10px;
+  background-color: #ffffff;
 
-  @media all and (min-width: 768px) {
-    width: 90%;
-    font-size: ${({ theme }) => theme.mainFontSize};
+  @media all and (max-width: 375px) {
+    width: 300px;
+    font-size: ${({ theme }) => theme.smallFontSize};
   }
 
-  @media all and (min-width: 768px) and (max-width: 1024px) {
-    width: 70%;
-    font-size: ${({ theme }) => theme.mainFontSize};
+  @media all and (min-width: 376px) and (max-width: 720px) {
+    width: 350px;
+    font-size: ${({ theme }) => theme.smallFontSize};
+  }
+
+  @media all and (min-width: 721px) and (max-width: 1024px) {
+    width: 400px;
+    font-size: ${({ theme }) => theme.smallFontSize};
   }
 
   @media all and (min-width: 1025px) {
-    width: 60%;
+    width: 450px;
     font-size: ${({ theme }) => theme.mainFontSize};
   }
 `;
