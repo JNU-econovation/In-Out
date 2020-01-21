@@ -1,17 +1,16 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { UpdateFrom } from "./update-form";
 import { ListInfoInput, ListInfoLabel } from "../../components/list-info";
 import { Service } from "@service";
 import { ErrorLabel } from "presentation/components/error-label";
-import { AlarmModal } from "presentation/components/alarm-modal";
 
 export const MyPage = () => {
-  const buttonElement = useRef(null);
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [newPasswordForCheck, setNewPasswordForCheck] = useState("");
   const [isconfirmedPassword, setIsConfirmedPassword] = useState(true);
+  const { userService } = Service;
 
   const onChangePassword = e => {
     setPassword(e.target.value);
@@ -19,7 +18,7 @@ export const MyPage = () => {
 
   const checkConfirmedPassword = e => {
     setIsConfirmedPassword(
-      Service.userService.validatePasswordForCheck(newPassword, e.target.value)
+      userService.validatePasswordForCheck(newPassword, e.target.value)
     );
   };
 
@@ -31,26 +30,13 @@ export const MyPage = () => {
     setNewPasswordForCheck(e.target.value);
   };
 
-  const checkFull = useCallback(
-    (password, newPassword, newPasswordForCheck) => {
-      if (password && newPassword && newPasswordForCheck) {
-        return buttonElement.current.removeAttribute("disabled");
-      }
-      return buttonElement.current.setAttribute("disabled", "true");
-    },
-    []
-  );
-
-  useEffect(() => {
-    checkFull(password, newPassword, newPasswordForCheck);
-  }, [password, newPassword, newPasswordForCheck, checkFull]);
+  const checkFull = () => {
+    return !(password && newPassword && newPasswordForCheck);
+  };
 
   const changePassword = async () => {
     try {
-      const result = await Service.userService.updatePassword(
-        password,
-        newPassword
-      );
+      const result = await userService.updatePassword(password, newPassword);
       alert(result.data);
     } catch (error) {
       alert(error.message);
@@ -68,35 +54,38 @@ export const MyPage = () => {
             width: "100%"
           }}
         >
-          <ListInfoLabel subject={"이름"} value={"김기표"}></ListInfoLabel>
+          <ListInfoLabel
+            subject={"이름"}
+            value={userService.getUser().name}
+          ></ListInfoLabel>
           <ListInfoInput
             value={password}
             onChange={onChangePassword}
             subject={"기존 비밀번호"}
+            inputType="password"
           ></ListInfoInput>
           <ListInfoInput
             value={newPassword}
             onChange={onChangeNewPassword}
             onBlur={checkConfirmedPassword}
             subject={"변경 비밀번호"}
+            inputType="password"
           ></ListInfoInput>
           <ListInfoInput
             value={newPasswordForCheck}
             onChange={onChangeCheckNewPassword}
             onBlur={checkConfirmedPassword}
             subject={"변경 비밀번호 확인"}
-          ></ListInfoInput>
-          {isconfirmedPassword ? (
-            <div>
-              <ErrorLabel></ErrorLabel>
+            inputType="password"
+          >
+            <div style={{ height: "10px" }}>
+              <ErrorLabel>
+                {isconfirmedPassword ? "" : "입력하신 비밀번호와 다릅니다."}
+              </ErrorLabel>
             </div>
-          ) : (
-            <div>
-              <ErrorLabel>입력하신 비밀번호와 다릅니다.</ErrorLabel>
-            </div>
-          )}
+          </ListInfoInput>
         </div>
-        <Button ref={buttonElement} onClick={changePassword} disabled={true}>
+        <Button onClick={changePassword} disabled={checkFull()}>
           비밀번호 변경
         </Button>
       </UpdateFrom>
@@ -109,13 +98,13 @@ const Button = styled.button`
   border: 0;
   -webkit-appearance: none;
   height: 30px;
-  background-color: #0099ff;
+  background-color: #203982;
   color: white;
   font-weight: 600;
   font-size: 10pt;
 
   :disabled {
-    background-color: #0099ff90;
+    background-color: #20398290;
   }
 `;
 

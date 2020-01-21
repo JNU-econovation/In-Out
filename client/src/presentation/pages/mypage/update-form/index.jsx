@@ -6,6 +6,7 @@ export const UpdateFrom = ({ children }) => {
 };
 
 const UpdateFromWapper = styled.section`
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -13,7 +14,7 @@ const UpdateFromWapper = styled.section`
   height: auto;
   border-radius: 5px;
   box-shadow: 0px 1px 5px grey;
-  padding: 10px;
+  padding: 40px;
   background-color: #ffffff;
 
   @media all and (max-width: 375px) {

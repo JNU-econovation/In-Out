@@ -17,7 +17,9 @@ export const ListInfoInput = ({
   subject,
   value,
   onChange = undefined,
-  onBlur = undefined
+  onBlur = undefined,
+  children,
+  inputType = "text"
 }) => {
   return (
     <LineWrapper>
@@ -26,7 +28,9 @@ export const ListInfoInput = ({
         value={value}
         onChange={onChange}
         onBlur={onBlur}
+        type={inputType}
       ></BlockInput>
+      {children}
     </LineWrapper>
   );
 };
@@ -61,7 +65,7 @@ const BlockLabel = styled.label`
   align-items: center;
   margin-right: 10px;
   width: auto;
-  font-weight: bolder;
+  font-weight: 900;
   margin-bottom: 10px;
 `;
 
@@ -71,6 +75,7 @@ const BlockLabel2 = styled.label`
   margin-right: 10px;
   width: 100%;
   font-weight: bolder;
+  font-size: ${({ theme }) => theme.mainFontSize};
 `;
 
 const BlockLabelWrapper = styled.section`
@@ -81,6 +86,8 @@ const BlockLabelWrapper = styled.section`
 
 const BlockInput = styled.input`
   display: inline-block;
+  border: 1px solid black;
   width: 100%;
-  height: ${({ theme }) => theme.mainFontSize};
+  height: 30px;
+  font-size: ${({ theme }) => theme.mainFontSize};
 `;

@@ -31,7 +31,8 @@ login = (req, res) => {
 
           const tokenUser = {
             memberId: user.memberId,
-            role: user.role
+            role: user.role,
+            name: user.name
           };
 
           const token = jwt.sign(tokenUser, key.tokenKey);
