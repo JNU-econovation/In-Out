@@ -8,6 +8,8 @@ import Register from "presentation/pages/home/register";
 import { PrivateRoute } from "presentation/components/private-route";
 import { useAuthDispatch, useAuthState } from "data/context/auth-context";
 import { Service } from "@service";
+import { MainHeader } from "./pages/home/Header";
+import "./App.css";
 
 function App() {
   const authDispatch = useAuthDispatch();
@@ -22,6 +24,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <Global></Global>
+      <MainHeader></MainHeader>
       <Router>
         <Switch>
           <Route path="/login">
@@ -41,13 +44,12 @@ function App() {
 }
 
 const Global = createGlobalStyle`
-html{
-  box-sizing: border-box;
-}
+  html{
+   box-sizing: border-box;
+  }
   body{
     margin: 0px;
   }
-
   #root{
     width: 100vw;
   }
