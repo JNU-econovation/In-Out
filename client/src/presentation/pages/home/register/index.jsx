@@ -3,7 +3,10 @@ import styled from "styled-components";
 import Clock from "react-live-clock";
 import Select from "react-select";
 import { Service } from "@service";
-// select option
+import { ListInfoLabel } from "presentation/components/list-info";
+import { SubmitButton } from "presentation/components/submit-button";
+import { AlarmModal } from "presentation/components/alarm-modal";
+
 const options = [
   { value: "study", label: "공부" },
   { value: "metting", label: "회의" },
@@ -21,6 +24,12 @@ const valueToNumber = {
 const Register = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [isAlreadyEnrole, setIsAlreadyEnrole] = useState(false);
+  const [modal, setModal] = useState({ on: false, message: "", title: "" });
+
+  const closeModal = () => {
+    setModal({ on: false, message: "", title: "" });
+  };
+
   const handleChange = selectedOption => {
     setSelectedOption(selectedOption);
   };
@@ -43,7 +52,13 @@ const Register = () => {
         label: options[valueToNumber[reason]].label
       });
       setIsAlreadyEnrole(true);
-    } catch (error) {}
+    } catch (error) {
+      setModal({
+        on: true,
+        message: error.response.data.message,
+        title: "오류"
+      });
+    }
   };
 
   const onUpdate = async () => {
@@ -51,8 +66,19 @@ const Register = () => {
       const result = await Service.registerService.update(selectedOption.value);
       if (result.status === 200) {
         checkEnrollmentAlready();
+        setModal({
+          on: true,
+          message: "수정되었습니다",
+          title: "성공"
+        });
       }
-    } catch (error) {}
+    } catch (error) {
+      setModal({
+        on: true,
+        message: error.response.data.message,
+        title: "오류"
+      });
+    }
   };
 
   const onSubmit = async () => {
@@ -62,84 +88,92 @@ const Register = () => {
       );
       if (result.status === 200) {
         checkEnrollmentAlready();
+        setModal({
+          on: true,
+          message: "신청되웠습니다.",
+          title: "성공"
+        });
       }
     } catch (error) {
-      alert(error);
+      setModal({
+        on: true,
+        message: error.response.data.message,
+        title: "오류"
+      });
     }
   };
 
   return (
     <RegisterBox>
-      <label>Register</label>
-      <NamedInputBox>
-        <InputLabel>이름</InputLabel>
-        <NamedText>김키키</NamedText>
-      </NamedInputBox>
-      <NamedInputBox>
-        <InputLabel>날짜</InputLabel>
-        <ClockBox>
+      <RegisterFrom>
+        {modal.on ? (
+          <AlarmModal title={modal.title} onClick={closeModal}>
+            {modal.message}
+          </AlarmModal>
+        ) : null}
+        {isAlreadyEnrole ? <h1>출입신청 완료</h1> : <h1>출입신청 대기</h1>}
+        <ListInfoLabel subject={"이름"}>김키키</ListInfoLabel>
+        <ListInfoLabel subject={"날짜"}>
           <Clock format={"YYYY년 MM월 DD일"} ticking={true} timezone={"KR"} />
-        </ClockBox>
-      </NamedInputBox>
-      <NamedInputBox>
-        <InputLabel>사유</InputLabel>
-        <SelectBox>
+        </ListInfoLabel>
+        <ListInfoLabel subject={"사유"}>
           <Select
             value={selectedOption}
             onChange={handleChange}
             options={options}
           />
-        </SelectBox>
-      </NamedInputBox>
-      {isAlreadyEnrole ? (
-        <button onClick={onUpdate}>Update</button>
-      ) : (
-        <button onClick={onSubmit}>Register</button>
-      )}
+        </ListInfoLabel>
+        {isAlreadyEnrole ? (
+          <SubmitButton onClick={onUpdate}>수정하기</SubmitButton>
+        ) : (
+          <SubmitButton onClick={onSubmit}>출입신청</SubmitButton>
+        )}
+      </RegisterFrom>
     </RegisterBox>
   );
 };
 
 export default Register;
 
-const RegisterBox = styled.section`
+const RegisterFrom = styled.section`
+  box-sizing: border-box;
   display: flex;
-  padding: 8px;
   flex-direction: column;
   align-items: center;
+  font-size: ${({ theme }) => theme.smallFontSize};
+  height: auto;
+  border-radius: 5px;
+  box-shadow: 0px 1px 5px grey;
+  padding: 32px;
+  background-color: #ffffff;
+
   @media all and (max-width: 375px) {
-    width: 100%;
+    width: 300px;
+    font-size: ${({ theme }) => theme.smallFontSize};
   }
-  @media all and (min-width: 376px) {
-    width: 100%;
+
+  @media all and (min-width: 376px) and (max-width: 720px) {
+    width: 350px;
+    font-size: ${({ theme }) => theme.smallFontSize};
   }
-  @media all and (min-width: 501px) {
-    width: 500px;
-    border: 1px solid black;
+
+  @media all and (min-width: 721px) and (max-width: 1024px) {
+    width: 400px;
+    font-size: ${({ theme }) => theme.smallFontSize};
+  }
+
+  @media all and (min-width: 1025px) {
+    width: 450px;
+    font-size: ${({ theme }) => theme.mainFontSize};
   }
 `;
 
-const NamedInputBox = styled.section`
-  width: 100%;
+const RegisterBox = styled.section`
   display: flex;
-  justify-content: space-between;
-  @media all and (max-width: 375px) {
-    flex-wrap: wrap;
-  }
-`;
-
-const InputLabel = styled.label`
-  width: 130px;
-`;
-
-const NamedText = styled.text`
-  width: 100%;
-`;
-
-const SelectBox = styled.section`
-  width: 100%;
-`;
-
-const ClockBox = styled.section`
-  width: 100%;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: calc(100vh - 50px);
+  background-color: #fbfcfc;
+  color: black;
 `;

@@ -4,6 +4,8 @@ import { UpdateFrom } from "./update-form";
 import { ListInfoInput, ListInfoLabel } from "../../components/list-info";
 import { Service } from "@service";
 import { ErrorLabel } from "presentation/components/error-label";
+import { AlarmModal } from "presentation/components/alarm-modal/index";
+import { SubmitButton } from "presentation/components/submit-button";
 
 export const MyPage = () => {
   const [password, setPassword] = useState("");
@@ -11,6 +13,7 @@ export const MyPage = () => {
   const [newPasswordForCheck, setNewPasswordForCheck] = useState("");
   const [isconfirmedPassword, setIsConfirmedPassword] = useState(true);
   const { userService } = Service;
+  const [modal, setModal] = useState({ on: false, message: "", title: "" });
 
   const onChangePassword = e => {
     setPassword(e.target.value);
@@ -41,16 +44,38 @@ export const MyPage = () => {
 
   const changePassword = async () => {
     try {
-      const result = await userService.updatePassword(password, newPassword);
-      alert(result.data);
+      await userService.updatePassword(password, newPassword);
+      setModal({
+        on: true,
+        message: "비밀번호가 성공적으로 바뀌었습니다.",
+        title: "성공"
+      });
     } catch (error) {
-      alert(error.message);
+      setModal({
+        on: true,
+        message: error.response.data.message,
+        title: "오류"
+      });
     }
+  };
+
+  const closeModal = () => {
+    setModal({ on: false, message: "", title: "" });
+    setPassword("");
+    setNewPassword("");
+    setNewPasswordForCheck("");
+    setIsConfirmedPassword(true);
   };
 
   return (
     <StyledBox>
       <UpdateFrom>
+        {modal.on ? (
+          <AlarmModal title={modal.title} onClick={closeModal}>
+            {modal.message}
+          </AlarmModal>
+        ) : null}
+
         <div
           style={{
             display: "flex",
@@ -88,35 +113,20 @@ export const MyPage = () => {
             </div>
           </ListInfoInput>
         </div>
-        <Button onClick={changePassword} disabled={checkFull()}>
+        <SubmitButton onClick={changePassword} disabled={checkFull()}>
           비밀번호 변경
-        </Button>
+        </SubmitButton>
       </UpdateFrom>
     </StyledBox>
   );
 };
-
-const Button = styled.button`
-  width: 200px;
-  border: 0;
-  -webkit-appearance: none;
-  height: 35px;
-  background-color: #203982;
-  color: white;
-  font-weight: 600;
-  font-size: ${({ theme }) => theme.smallFontSize};
-
-  :disabled {
-    background-color: #20398290;
-  }
-`;
 
 const StyledBox = styled.section`
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - 50px);
   background-color: #fbfcfc;
   color: black;
 `;
