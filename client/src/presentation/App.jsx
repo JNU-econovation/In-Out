@@ -9,6 +9,7 @@ import { PrivateRoute } from "presentation/components/private-route";
 import { useAuthDispatch, useAuthState } from "data/context/auth-context";
 import { Service } from "@service";
 import { MainHeader } from "./pages/home/Header";
+import { Bot } from "./pages/home/Header/bot";
 import "./App.css";
 
 function App() {
@@ -24,20 +25,22 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <Global></Global>
-      <MainHeader></MainHeader>
       <Router>
+        <MainHeader></MainHeader>
         <Switch>
           <Route path="/login">
             <Login></Login>
           </Route>
-          <PrivateRoute path="/register" auth={auth}>
+          <PrivateRoute exact path="/" auth={auth}>
             <Register></Register>
           </PrivateRoute>
-          <PrivateRoute path="/my" auth={auth}>
+          <PrivateRoute exact path="/mypage" auth={auth}>
             <MyPage />
           </PrivateRoute>
-          <PrivateRoute path="/admin" auth={auth}></PrivateRoute>
+          <PrivateRoute exact path="/admin" auth={auth}></PrivateRoute>
         </Switch>
+
+        <Bot></Bot>
       </Router>
     </ThemeProvider>
   );
