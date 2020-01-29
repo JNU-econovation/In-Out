@@ -38,6 +38,7 @@ app.use("/api", require("./routes/api/auth"));
 app.use("/api/admin", require("./routes/api/admin"));
 app.use("/api/enrollments", require("./routes/api/enroll"));
 app.use("/api/mypage", require("./routes/api/user"));
+app.use("/api/mail", require("./routes/api/mail"));
 app.use(indexRouter);
 
 // catch 404 and forward to error handler
