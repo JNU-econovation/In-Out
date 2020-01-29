@@ -3,10 +3,15 @@ import styled from "styled-components";
 import { Service } from "@service";
 import { useHistory, useLocation } from "react-router-dom";
 import { useAuthDispatch } from "data/context/auth-context";
+import { ListInfoInput } from "presentation/components/list-info";
+import { SubmitButton } from "presentation/components/submit-button";
+import { AlarmModal } from "presentation/components/alarm-modal";
 
 const Login = () => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
+  const [modal, setModal] = useState({ on: false, message: "", title: "" });
+
   const authDispatch = useAuthDispatch();
   let history = useHistory();
   let location = useLocation();
@@ -21,7 +26,11 @@ const Login = () => {
       });
       history.replace(from);
     } catch (error) {
-      alert(error.response.data.message);
+      setModal({
+        on: true,
+        message: error.response.data.message,
+        title: "오류"
+      });
     }
   };
 
@@ -33,24 +42,33 @@ const Login = () => {
     setPassword(event.target.value);
   };
 
+  const closeModal = () => {
+    setModal({ on: false, message: "", title: "" });
+    setPassword("");
+  };
+
   return (
     <LoginBox>
-      <label>Login</label>
-      <NamedInputBox>
-        <InputLabel>학번</InputLabel>
-        <NamedInput type="id" value={id} onChange={handleIdChange}></NamedInput>
-      </NamedInputBox>
-      <NamedInputBox>
-        <InputLabel>비밀번호</InputLabel>
-        <NamedInput
-          type="password"
+      <LoginFrom>
+        {modal.on ? (
+          <AlarmModal title={modal.title} onClick={closeModal}>
+            {modal.message}
+          </AlarmModal>
+        ) : null}
+        <h1>Login</h1>
+        <ListInfoInput
+          subject={"학번"}
+          value={id}
+          onChange={handleIdChange}
+        ></ListInfoInput>
+        <ListInfoInput
+          subject={"비밀번호"}
+          type={"password"}
           value={password}
           onChange={handlePasswordChange}
-        ></NamedInput>
-      </NamedInputBox>
-      <button type="button" onClick={login}>
-        LOGIN
-      </button>
+        ></ListInfoInput>
+        <SubmitButton onClick={login}>LOGIN</SubmitButton>
+      </LoginFrom>
     </LoginBox>
   );
 };
@@ -58,37 +76,44 @@ const Login = () => {
 export default Login;
 
 const LoginBox = styled.section`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: calc(100vh - 100px);
+  background-color: #fbfcfc;
+  color: black;
+`;
+
+const LoginFrom = styled.section`
   box-sizing: border-box;
   display: flex;
-  padding: 10px;
   flex-direction: column;
   align-items: center;
+  font-size: ${({ theme }) => theme.smallFontSize};
+  height: auto;
+  border-radius: 5px;
+  box-shadow: 0px 1px 5px grey;
+  padding: 32px;
+  background-color: #ffffff;
+
   @media all and (max-width: 375px) {
-    width: 100%;
+    width: 300px;
+    font-size: ${({ theme }) => theme.smallFontSize};
   }
-  @media all and (min-width: 376px) {
-    width: 100%;
-  }
-  @media all and (min-width: 501px) {
-    min-width: 375px;
-    width: 500px;
-    border: 1px solid black;
-  }
-`;
 
-const NamedInputBox = styled.section`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  @media all and (max-width: 375px) {
-    flex-wrap: wrap;
+  @media all and (min-width: 376px) and (max-width: 720px) {
+    width: 350px;
+    font-size: ${({ theme }) => theme.smallFontSize};
   }
-`;
 
-const InputLabel = styled.label`
-  width: 130px;
-`;
+  @media all and (min-width: 721px) and (max-width: 1024px) {
+    width: 400px;
+    font-size: ${({ theme }) => theme.smallFontSize};
+  }
 
-const NamedInput = styled.input`
-  width: 100%;
+  @media all and (min-width: 1025px) {
+    width: 450px;
+    font-size: ${({ theme }) => theme.mainFontSize};
+  }
 `;

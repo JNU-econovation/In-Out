@@ -4,7 +4,7 @@ const User = function(axioswrapper) {
   this.axios = axioswrapper;
 };
 
-User.prototype.update = async function(oldPassword, newPassword) {
+User.prototype.updatePassword = async function(oldPassword, newPassword) {
   try {
     return await this.axios.getAxios().put("/api/mypage/", {
       oldPassword,
