@@ -173,7 +173,7 @@ const RegisterBox = styled.section`
   justify-content: center;
   align-items: center;
   width: 100vw;
-  height: calc(100vh - 50px);
+  height: calc(100vh - 100px);
   background-color: #fbfcfc;
   color: black;
 `;

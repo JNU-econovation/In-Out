@@ -2,12 +2,13 @@ import React from "react";
 import styled from "styled-components";
 
 export const ListInfoLabel = props => {
-  const { subject, value } = props;
+  const { subject, value, children } = props;
   return (
     <LineWrapper>
       <BlockLabel>{subject}</BlockLabel>
       <BlockLabelWrapper>
         <BlockLabel2>{value}</BlockLabel2>
+        {children}
       </BlockLabelWrapper>
     </LineWrapper>
   );
@@ -87,7 +88,7 @@ const BlockLabelWrapper = styled.section`
 const BlockInput = styled.input`
   box-sizing: border-box;
   display: inline-block;
-  border: 1px solid black;
+  border: 1px solid grey;
   padding: 8px;
   width: 100%;
   height: 40px;
