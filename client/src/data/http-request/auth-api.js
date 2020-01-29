@@ -14,4 +14,12 @@ Auth.prototype.login = async function(memberId, password) {
   }
 };
 
+Auth.prototype.logout = async function() {
+  try {
+    await this.axios.getAxios().get("/api/logout");
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const auth = new Auth(axioswrapper);
