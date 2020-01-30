@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import styled, { css } from "styled-components";
-import { useAuthState } from "data/context/auth-context";
+import { useAuthState, useAuthDispatch } from "data/context/auth-context";
 import { useLocation, useHistory } from "react-router-dom";
 import { useState } from "react";
 import { Service } from "@service";
@@ -9,11 +9,13 @@ export const Bot = () => {
   const location = useLocation();
   const history = useHistory();
   const auth = useAuthState();
+  const authDispatch = useAuthDispatch();
   const [state, setState] = useState({
     login: false,
     mypage: false,
     register: false
   });
+
   useEffect(() => {
     switch (location.pathname) {
       case "/":
@@ -46,6 +48,10 @@ export const Bot = () => {
       if (!result) {
         history.push("/");
       }
+      authDispatch({
+        type: "CHANGE",
+        value: false
+      });
       history.push("/login");
     } catch (error) {
       history.push("/");
