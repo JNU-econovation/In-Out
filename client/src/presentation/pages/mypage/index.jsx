@@ -113,7 +113,11 @@ export const MyPage = () => {
             </div>
           </ListInfoInput>
         </div>
-        <SubmitButton onClick={changePassword} disabled={checkFull()}>
+        <SubmitButton
+          type="button"
+          onClick={changePassword}
+          disabled={checkFull()}
+        >
           비밀번호 변경
         </SubmitButton>
       </UpdateFrom>
