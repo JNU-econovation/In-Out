@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import { useAuthState } from "data/context/auth-context";
+import { useAuthState, useAuthDispatch } from "data/context/auth-context";
 import { useHistory } from "react-router-dom";
 import { Service } from "@service";
 
@@ -8,30 +8,40 @@ export const MainHeader = () => {
   const auth = useAuthState();
   const history = useHistory();
   const { userService } = Service;
+  const authDispatch = useAuthDispatch();
+
   const logout = async function() {
     try {
       const result = await Service.authService.logout();
       if (!result) {
-        alert("실패");
+        history.push("/");
       }
+      authDispatch({
+        type: "CHANGE",
+        value: false
+      });
       history.push("/login");
     } catch (error) {
-      alert(error.message);
+      history.push("/");
     }
   };
 
   return (
     <Header>
       <Box>
-        {userService.getUser().role >= 1 ? (
+        {auth && userService.getUser().role >= 1 ? (
           <TopButton2 onClick={() => history.push("/admin")}>Admin</TopButton2>
         ) : null}
       </Box>
       <BlockSpan onClick={() => history.push("/")}>ECONOVATION</BlockSpan>
       <Box>
-        <TopButton>마에피에지</TopButton>
         {auth ? (
-          <TopButton onClick={logout}>로그아웃</TopButton>
+          <>
+            <TopButton onClick={() => history.push("/mypage")}>
+              마에페이지
+            </TopButton>
+            <TopButton onClick={logout}>로그아웃</TopButton>
+          </>
         ) : (
           <TopButton>로그인</TopButton>
         )}

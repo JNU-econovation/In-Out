@@ -67,7 +67,9 @@ const Login = () => {
           value={password}
           onChange={handlePasswordChange}
         ></ListInfoInput>
-        <SubmitButton onClick={login}>LOGIN</SubmitButton>
+        <SubmitButton type="button" onClick={login}>
+          LOGIN
+        </SubmitButton>
       </LoginFrom>
     </LoginBox>
   );

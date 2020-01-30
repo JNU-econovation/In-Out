@@ -68,7 +68,7 @@ const Register = () => {
         checkEnrollmentAlready();
         setModal({
           on: true,
-          message: "수정되었습니다",
+          message: "수정됐습니다",
           title: "성공"
         });
       }
@@ -137,9 +137,13 @@ const Register = () => {
           />
         </ListInfoLabel>
         {isAlreadyEnrole ? (
-          <SubmitButton onClick={onUpdate}>수정하기</SubmitButton>
+          <SubmitButton type="button" onClick={onUpdate}>
+            수정하기
+          </SubmitButton>
         ) : (
-          <SubmitButton onClick={onSubmit}>출입신청</SubmitButton>
+          <SubmitButton type="button" onClick={onSubmit}>
+            출입신청
+          </SubmitButton>
         )}
       </RegisterFrom>
     </RegisterBox>

@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 
-export const SubmitButton = ({ onClick, children, disabled = false }) => {
+export const SubmitButton = ({ type, onClick, children, disabled = false }) => {
   return (
-    <Button onClick={onClick} disabled={disabled}>
+    <Button type={type} onClick={onClick} disabled={disabled}>
       {children}
     </Button>
   );
