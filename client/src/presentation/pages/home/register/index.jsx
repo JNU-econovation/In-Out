@@ -1,31 +1,26 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import Clock from "react-live-clock";
 import Select from "react-select";
+import Moment from "react-moment";
 import { Service } from "@service";
 import { ListInfoLabel } from "presentation/components/list-info";
 import { SubmitButton } from "presentation/components/submit-button";
 import { AlarmModal } from "presentation/components/alarm-modal";
+import { ErrorLabel } from "presentation/components/error-label";
+import "moment-timezone";
 
 const options = [
-  { value: "study", label: "공부" },
-  { value: "metting", label: "회의" },
-  { value: "develop", label: "개발" },
-  { value: "manage", label: "동아리 운영" }
+  { value: "공부", label: "공부" },
+  { value: "회의", label: "회의" },
+  { value: "개발", label: "개발" },
+  { value: "동아리 운영", label: "동아리 운영" }
 ];
-
-const valueToNumber = {
-  study: 0,
-  metting: 1,
-  develop: 2,
-  manage: 3
-};
 
 const Register = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [isAlreadyEnrole, setIsAlreadyEnrole] = useState(false);
   const [modal, setModal] = useState({ on: false, message: "", title: "" });
-
+  const { userService, registerService } = Service;
   const closeModal = () => {
     setModal({ on: false, message: "", title: "" });
   };
@@ -40,16 +35,21 @@ const Register = () => {
 
   const checkEnrollmentAlready = async () => {
     try {
-      const { status, data } = await Service.registerService.get();
+      const { status, data } = await registerService.get();
       const { result } = data;
-      const { reason } = result;
-      if (status !== 200) {
+      if (status !== 200 || !result) {
         setIsAlreadyEnrole(false);
         return;
       }
+
+      const { reason } = result;
+
       setSelectedOption({
         value: reason,
-        label: options[valueToNumber[reason]].label
+        label: options.find(s => {
+          console.log(s.value, reason);
+          return s.value === reason;
+        }).label
       });
       setIsAlreadyEnrole(true);
     } catch (error) {
@@ -63,7 +63,7 @@ const Register = () => {
 
   const onUpdate = async () => {
     try {
-      const result = await Service.registerService.update(selectedOption.value);
+      const result = await registerService.update(selectedOption.value);
       if (result.status === 200) {
         checkEnrollmentAlready();
         setModal({
@@ -83,9 +83,7 @@ const Register = () => {
 
   const onSubmit = async () => {
     try {
-      const result = await Service.registerService.register(
-        selectedOption.value
-      );
+      const result = await registerService.register(selectedOption.value);
       if (result.status === 200) {
         checkEnrollmentAlready();
         setModal({
@@ -111,10 +109,25 @@ const Register = () => {
             {modal.message}
           </AlarmModal>
         ) : null}
-        {isAlreadyEnrole ? <h1>출입신청 완료</h1> : <h1>출입신청 대기</h1>}
-        <ListInfoLabel subject={"이름"}>김키키</ListInfoLabel>
+        <Header1>출입신청</Header1>
+        <ListInfoLabel>
+          <div style={{ height: "16px", width: "100%" }}>
+            <ErrorLabel>
+              {isAlreadyEnrole ? "이미 신청이 완료 되었습니다." : ""}
+            </ErrorLabel>
+          </div>
+        </ListInfoLabel>
+
+        <ListInfoLabel
+          subject={"이름"}
+          value={userService.getUser().name}
+        ></ListInfoLabel>
         <ListInfoLabel subject={"날짜"}>
-          <Clock format={"YYYY년 MM월 DD일"} ticking={true} timezone={"KR"} />
+          <Moment
+            interval={1000}
+            format={"YYYY/MM/DD A hh:mm"}
+            tz="Asia/Seoul"
+          ></Moment>
         </ListInfoLabel>
         <ListInfoLabel subject={"사유"}>
           <Select
@@ -134,6 +147,10 @@ const Register = () => {
 };
 
 export default Register;
+
+const Header1 = styled.h1`
+  margin-bottom: 0;
+`;
 
 const RegisterFrom = styled.section`
   box-sizing: border-box;
