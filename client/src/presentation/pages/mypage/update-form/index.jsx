@@ -2,10 +2,10 @@ import React from "react";
 import styled from "styled-components";
 
 export const UpdateFrom = ({ children }) => {
-  return <UpdateFromWapper>{children}</UpdateFromWapper>;
+  return <UpdateFromWapper autoCapitalize="off">{children}</UpdateFromWapper>;
 };
 
-const UpdateFromWapper = styled.section`
+const UpdateFromWapper = styled.form`
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
