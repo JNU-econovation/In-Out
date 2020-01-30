@@ -31,7 +31,8 @@ login = (req, res) => {
 
           const tokenUser = {
             memberId: user.memberId,
-            role: user.role
+            role: user.role,
+            name: user.name
           };
 
           const token = jwt.sign(tokenUser, key.tokenKey);
@@ -53,16 +54,24 @@ verifyToken = (req, res, next) => {
     req.user = decoded;
     next();
   } else {
-    res.status(403).send(
-      json({
-        message: "인증을 하지 못하였습니다.",
-        errCode: "22"
-      })
-    );
+    res.status(403).json({
+      message: "인증을 하지 못하였습니다.",
+      errCode: "22"
+    });
+  }
+};
+
+logout = (req, res) => {
+  try {
+    req.logout();
+    res.status(200).end();
+  } catch (error) {
+    res.status(400).end();
   }
 };
 
 module.exports = {
   verifyToken,
-  login
+  login,
+  logout
 };

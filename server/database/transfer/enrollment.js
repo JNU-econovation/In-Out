@@ -45,7 +45,7 @@ const getEnrollmentsById = async memberId => {
   }
 };
 
-const changeReason = async (memberId, reason) => {
+const changeReason = async (memberId, reason, today) => {
   try {
     const transaction = await database.sequelize.transaction();
     await database.Enrollment.update(
@@ -54,7 +54,8 @@ const changeReason = async (memberId, reason) => {
       },
       {
         where: {
-          userMemberId: memberId
+          userMemberId: memberId,
+          today: today
         }
       },
       {

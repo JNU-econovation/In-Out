@@ -3,7 +3,7 @@ const passportJWT = require("passport-jwt");
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
 const LocalStrategy = require("passport-local").Strategy;
-const DBForUser = require("./../database/transfer/user");
+const userRepository = require("./../database/transfer/user");
 const key = require("./../config/keys.json");
 const bcrypt = require("bcryptjs");
 
@@ -16,9 +16,9 @@ module.exports = () => {
       },
       async (memberId, password, done) => {
         try {
-          let user = await DBForUser.findUserById(memberId);
+          let user = await userRepository.findUserById(memberId);
 
-          if (bcrypt.compare(password, user.password)) {
+          if (await bcrypt.compare(password, user.password)) {
             return done(null, user, {
               message: "Logged In Successfully"
             });
@@ -42,7 +42,7 @@ module.exports = () => {
         secretOrKey: key.tokenKey
       },
       (jwtPayload, done) => {
-        DBForUser.findUserById(jwtPayload.memberId, (err, user) => {
+        userRepository.findUserById(jwtPayload.memberId, (err, user) => {
           if (err) {
             return done(err);
           }

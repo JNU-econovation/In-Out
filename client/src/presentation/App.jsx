@@ -8,6 +8,10 @@ import Register from "presentation/pages/home/register";
 import { PrivateRoute } from "presentation/components/private-route";
 import { useAuthDispatch, useAuthState } from "data/context/auth-context";
 import { Service } from "@service";
+import { MainHeader } from "./pages/home/Header";
+import { Bot } from "./pages/home/Header/bot";
+import "./App.css";
+import { Admin } from "./pages/admin";
 
 function App() {
   const authDispatch = useAuthDispatch();
@@ -23,31 +27,35 @@ function App() {
     <ThemeProvider theme={theme}>
       <Global></Global>
       <Router>
+        <MainHeader></MainHeader>
         <Switch>
           <Route path="/login">
             <Login></Login>
           </Route>
-          <PrivateRoute path="/register" auth={auth}>
+          <PrivateRoute exact path="/" auth={auth}>
             <Register></Register>
           </PrivateRoute>
-          <PrivateRoute path="/my" auth={auth}>
+          <PrivateRoute exact path="/mypage" auth={auth}>
             <MyPage />
           </PrivateRoute>
-          <PrivateRoute path="/admin" auth={auth}></PrivateRoute>
+          <PrivateRoute exact path="/admin" auth={auth}>
+            <Admin />
+          </PrivateRoute>
         </Switch>
+
+        <Bot></Bot>
       </Router>
     </ThemeProvider>
   );
 }
 
 const Global = createGlobalStyle`
-html{
-  box-sizing: border-box;
-}
+  html{
+   box-sizing: border-box;
+  }
   body{
     margin: 0px;
   }
-
   #root{
     width: 100vw;
   }

@@ -1,26 +1,30 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import Clock from "react-live-clock";
 import Select from "react-select";
+import Moment from "react-moment";
 import { Service } from "@service";
-// select option
-const options = [
-  { value: "study", label: "공부" },
-  { value: "metting", label: "회의" },
-  { value: "develop", label: "개발" },
-  { value: "manage", label: "동아리 운영" }
-];
+import { ListInfoLabel } from "presentation/components/list-info";
+import { SubmitButton } from "presentation/components/submit-button";
+import { AlarmModal } from "presentation/components/alarm-modal";
+import { ErrorLabel } from "presentation/components/error-label";
+import "moment-timezone";
 
-const valueToNumber = {
-  study: 0,
-  metting: 1,
-  develop: 2,
-  manage: 3
-};
+const options = [
+  { value: "공부", label: "공부" },
+  { value: "회의", label: "회의" },
+  { value: "개발", label: "개발" },
+  { value: "동아리 운영", label: "동아리 운영" }
+];
 
 const Register = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [isAlreadyEnrole, setIsAlreadyEnrole] = useState(false);
+  const [modal, setModal] = useState({ on: false, message: "", title: "" });
+  const { userService, registerService } = Service;
+  const closeModal = () => {
+    setModal({ on: false, message: "", title: "" });
+  };
+
   const handleChange = selectedOption => {
     setSelectedOption(selectedOption);
   };
@@ -31,115 +35,162 @@ const Register = () => {
 
   const checkEnrollmentAlready = async () => {
     try {
-      const { status, data } = await Service.registerService.get();
+      const { status, data } = await registerService.get();
       const { result } = data;
-      const { reason } = result;
-      if (status !== 200) {
+      if (status !== 200 || !result) {
         setIsAlreadyEnrole(false);
         return;
       }
+
+      const { reason } = result;
+
       setSelectedOption({
         value: reason,
-        label: options[valueToNumber[reason]].label
+        label: options.find(s => {
+          console.log(s.value, reason);
+          return s.value === reason;
+        }).label
       });
       setIsAlreadyEnrole(true);
-    } catch (error) {}
+    } catch (error) {
+      setModal({
+        on: true,
+        message: error.response.data.message,
+        title: "오류"
+      });
+    }
   };
 
   const onUpdate = async () => {
     try {
-      const result = await Service.registerService.update(selectedOption.value);
+      const result = await registerService.update(selectedOption.value);
       if (result.status === 200) {
         checkEnrollmentAlready();
+        setModal({
+          on: true,
+          message: "수정되었습니다",
+          title: "성공"
+        });
       }
-    } catch (error) {}
+    } catch (error) {
+      setModal({
+        on: true,
+        message: error.response.data.message,
+        title: "오류"
+      });
+    }
   };
 
   const onSubmit = async () => {
     try {
-      const result = await Service.registerService.register(
-        selectedOption.value
-      );
+      const result = await registerService.register(selectedOption.value);
       if (result.status === 200) {
         checkEnrollmentAlready();
+        setModal({
+          on: true,
+          message: "신청되웠습니다.",
+          title: "성공"
+        });
       }
     } catch (error) {
-      alert(error);
+      setModal({
+        on: true,
+        message: error.response.data.message,
+        title: "오류"
+      });
     }
   };
 
   return (
     <RegisterBox>
-      <label>Register</label>
-      <NamedInputBox>
-        <InputLabel>이름</InputLabel>
-        <NamedText>김키키</NamedText>
-      </NamedInputBox>
-      <NamedInputBox>
-        <InputLabel>날짜</InputLabel>
-        <ClockBox>
-          <Clock format={"YYYY년 MM월 DD일"} ticking={true} timezone={"KR"} />
-        </ClockBox>
-      </NamedInputBox>
-      <NamedInputBox>
-        <InputLabel>사유</InputLabel>
-        <SelectBox>
+      <RegisterFrom>
+        {modal.on ? (
+          <AlarmModal title={modal.title} onClick={closeModal}>
+            {modal.message}
+          </AlarmModal>
+        ) : null}
+        <Header1>출입신청</Header1>
+        <ListInfoLabel>
+          <div style={{ height: "16px", width: "100%" }}>
+            <ErrorLabel>
+              {isAlreadyEnrole ? "이미 신청이 완료 되었습니다." : ""}
+            </ErrorLabel>
+          </div>
+        </ListInfoLabel>
+
+        <ListInfoLabel
+          subject={"이름"}
+          value={userService.getUser().name}
+        ></ListInfoLabel>
+        <ListInfoLabel subject={"날짜"}>
+          <Moment
+            interval={1000}
+            format={"YYYY/MM/DD A hh:mm"}
+            tz="Asia/Seoul"
+          ></Moment>
+        </ListInfoLabel>
+        <ListInfoLabel subject={"사유"}>
           <Select
             value={selectedOption}
             onChange={handleChange}
             options={options}
           />
-        </SelectBox>
-      </NamedInputBox>
-      {isAlreadyEnrole ? (
-        <button onClick={onUpdate}>Update</button>
-      ) : (
-        <button onClick={onSubmit}>Register</button>
-      )}
+        </ListInfoLabel>
+        {isAlreadyEnrole ? (
+          <SubmitButton onClick={onUpdate}>수정하기</SubmitButton>
+        ) : (
+          <SubmitButton onClick={onSubmit}>출입신청</SubmitButton>
+        )}
+      </RegisterFrom>
     </RegisterBox>
   );
 };
 
 export default Register;
 
-const RegisterBox = styled.section`
+const Header1 = styled.h1`
+  margin-bottom: 0;
+`;
+
+const RegisterFrom = styled.section`
+  box-sizing: border-box;
   display: flex;
-  padding: 10px;
   flex-direction: column;
   align-items: center;
+  font-size: ${({ theme }) => theme.smallFontSize};
+  height: auto;
+  border-radius: 5px;
+  box-shadow: 0px 1px 5px grey;
+  padding: 32px;
+  background-color: #ffffff;
+
   @media all and (max-width: 375px) {
-    width: 100%;
+    width: 300px;
+    font-size: ${({ theme }) => theme.smallFontSize};
   }
-  @media all and (min-width: 376px) {
-    width: 100%;
+
+  @media all and (min-width: 376px) and (max-width: 720px) {
+    width: 350px;
+    font-size: ${({ theme }) => theme.smallFontSize};
   }
-  @media all and (min-width: 501px) {
-    width: 500px;
-    border: 1px solid black;
+
+  @media all and (min-width: 721px) and (max-width: 1024px) {
+    width: 400px;
+    font-size: ${({ theme }) => theme.smallFontSize};
+  }
+
+  @media all and (min-width: 1025px) {
+    width: 450px;
+    font-size: ${({ theme }) => theme.mainFontSize};
   }
 `;
 
-const NamedInputBox = styled.section`
-  width: 100%;
+const RegisterBox = styled.section`
   display: flex;
-  justify-content: space-between;
-  @media all and (max-width: 375px) {
-    flex-wrap: wrap;
-  }
-`;
-
-const InputLabel = styled.label`
-  width: 130px;
-`;
-
-const NamedText = styled.text`
-  width: 100%;
-`;
-
-const SelectBox = styled.section`
-  width: 100%;
-`;
-
-const ClockBox = styled.section`
-  width: 100%;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: calc(100vh - 100px);
+  background-color: #fbfcfc;
+  color: black;
 `;

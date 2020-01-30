@@ -38,6 +38,7 @@ app.use("/api", require("./routes/api/auth"));
 app.use("/api/admin", require("./routes/api/admin"));
 app.use("/api/enrollments", require("./routes/api/enroll"));
 app.use("/api/mypage", require("./routes/api/user"));
+app.use("/api/mail", require("./routes/api/mail"));
 app.use(indexRouter);
 
 // catch 404 and forward to error handler
@@ -53,8 +54,8 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  console.error(error);
-  res.send(error.message);
+  console.error(err);
+  res.send(err.message);
 });
 
 module.exports = app;

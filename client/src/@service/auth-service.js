@@ -24,4 +24,17 @@ AuthService.prototype.isLogined = function() {
   return false;
 };
 
+AuthService.prototype.logout = async function() {
+  try {
+    const result = await this.authApi.logout();
+    if (result.status === 200) {
+      this.storage.remove();
+      return true;
+    }
+    return false;
+  } catch (error) {
+    return false;
+  }
+};
+
 export const authService = new AuthService();
