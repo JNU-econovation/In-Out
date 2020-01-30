@@ -30,6 +30,7 @@ export const ListInfoInput = ({
         onChange={onChange}
         onBlur={onBlur}
         type={inputType}
+        autoComplete="off"
       ></BlockInput>
       {children}
     </LineWrapper>
