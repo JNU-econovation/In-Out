@@ -62,8 +62,12 @@ verifyToken = (req, res, next) => {
 };
 
 logout = (req, res) => {
-  req.logout();
-  res.redirect("/");
+  try {
+    req.logout();
+    res.status(200).end();
+  } catch (error) {
+    res.status(400).end();
+  }
 };
 
 module.exports = {
