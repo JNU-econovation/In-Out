@@ -102,7 +102,11 @@ const updateEnrollment = async (req, res) => {
   }
 
   try {
-    await enrollmentRepository.changeReason(req.body.memberId, req.body.reason);
+    await enrollmentRepository.changeReason(
+      req.body.memberId,
+      req.body.reason,
+      dateHandler.getFormatDate(now)
+    );
   } catch (error) {
     return res.status(500).json({
       message: error.message,
