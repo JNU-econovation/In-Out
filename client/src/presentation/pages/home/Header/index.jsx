@@ -1,22 +1,80 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useAuthState } from "data/context/auth-context";
 import { useHistory } from "react-router-dom";
+import { Service } from "@service";
 
 export const MainHeader = () => {
   const auth = useAuthState();
   const history = useHistory();
+  const { userService } = Service;
+  const logout = async function() {
+    try {
+      const result = await Service.authService.logout();
+      if (!result) {
+        alert("실패");
+      }
+      history.push("/login");
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
   return (
     <Header>
-      <Box></Box>
+      <Box>
+        {userService.getUser().role >= 1 ? (
+          <TopButton2 onClick={() => history.push("/admin")}>Admin</TopButton2>
+        ) : null}
+      </Box>
       <BlockSpan onClick={() => history.push("/")}>ECONOVATION</BlockSpan>
       <Box>
         <TopButton>마에피에지</TopButton>
-        {auth ? <TopButton>로그아웃</TopButton> : <TopButton>로그인</TopButton>}
+        {auth ? (
+          <TopButton onClick={logout}>로그아웃</TopButton>
+        ) : (
+          <TopButton>로그인</TopButton>
+        )}
       </Box>
     </Header>
   );
 };
+
+const TopButton2 = styled.button`
+  width: 60px;
+  border: 2px solid #ffffff;
+  -webkit-appearance: none;
+  height: 36px;
+  background-color: inherit;
+  color: white;
+  font-weight: 600;
+  font-size: ${({ theme }) => theme.smallFontSize};
+  padding: 1px;
+  line-height: 36px;
+  transition: 200ms;
+
+  @media all and (max-width: 720px) {
+    :active {
+      background-color: white;
+      color: #203982;
+      outline: none;
+    }
+  }
+  @media all and (min-width: 721px) {
+    :hover {
+      background-color: black;
+    }
+
+    :active {
+      background-color: white;
+      color: #203982;
+      outline: none;
+    }
+  }
+  :focus {
+    outline: none;
+  }
+`;
 
 const TopButton = styled.button`
   width: 98px;
@@ -31,20 +89,27 @@ const TopButton = styled.button`
   line-height: 36px;
   transition: 200ms;
 
-  :hover {
-    background-color: black;
-  }
-  :active {
-    background-color: white;
-    color: #203982;
-    outline: none;
-  }
-
-  :focus {
-    outline: none;
-  }
   @media all and (max-width: 720px) {
     display: none;
+    :active {
+      background-color: white;
+      color: #203982;
+      outline: none;
+    }
+  }
+  @media all and (min-width: 721px) {
+    :hover {
+      background-color: black;
+    }
+
+    :active {
+      background-color: white;
+      color: #203982;
+      outline: none;
+    }
+  }
+  :focus {
+    outline: none;
   }
 `;
 
@@ -57,7 +122,7 @@ const Box = styled.section`
   margin-right: 16px;
 
   @media all and (max-width: 720px) {
-    justify-content: flex-end;
+    justify-content: center;
   }
 
   @media all and (min-width: 721px) {
