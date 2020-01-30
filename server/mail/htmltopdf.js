@@ -3,56 +3,57 @@ const pdf = require("html-pdf");
 const dateHandler = require("./../util/date-handler");
 
 const now = new Date();
-let data = `<!DOCTYPE html>
-<html lang="en">
+let data = "";
 
-<head>
-    <meta charset="UTF-8">
-    <title>Document</title>
-    <style>
-        td {
-            height: 40px;
-            border: 1px solid black;
-        }
-
-        th {
-            height: 35px;
-            border: 1px solid black;
-            background-color: #a0a0a0;
-        }
-
-        table {
-            text-align: center;
-            width: 100%;
-            border: 1px solid black;
-            border-collapse: collapse;
-        }
-    </style>
-</head>
-
-<body>
-    <h1 style="text-align: center; margin-top: 60px;">정보 전산원 야간 출입 신청서</h1>
-    <div style="margin:100px; margin-top: 50px;">
-        <div><strong>소속 : EOCONOVATION</strong><br>
-            <strong>출입 일시 : </strong> <span id=date>${dateHandler.getFormatDate(
-              now
-            )}</span><span> (${dateHandler.getDayToStr(
-  now
-)}) 21:00 ~ 24:00</span> <br>
-            <strong>목적 : 성과발표회 팀프로젝트 개발 </strong>
-        </div>
-        <br>
-        <div>
-            <table style="width: 100%;">
-                <tr>
-                    <th style="width: 50px;">No.</th>
-                    <th style="width: 150px;">이름</th>
-                    <th style="width: 500px;">사유</th>
-                    <th style="width: 150px;">비고</th>
-                </tr>`;
-
-const toPdf = async results => {
+const toPdf = async (results, callback) => {
   try {
+    data += `<!DOCTYPE html>
+    <html lang="en">
+    
+    <head>
+        <meta charset="UTF-8">
+        <title>Document</title>
+        <style>
+            td {
+                height: 40px;
+                border: 1px solid black;
+            }
+    
+            th {
+                height: 35px;
+                border: 1px solid black;
+                background-color: #a0a0a0;
+            }
+    
+            table {
+                text-align: center;
+                width: 100%;
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+        </style>
+    </head>
+    
+    <body>
+        <h1 style="text-align: center; margin-top: 60px;">정보 전산원 야간 출입 신청서</h1>
+        <div style="margin:100px; margin-top: 50px;">
+            <div><strong>소속 : EOCONOVATION</strong><br>
+                <strong>출입 일시 : </strong> <span id=date>${dateHandler.getFormatDate(
+                  now
+                )}</span><span> (${dateHandler.getDayToStr(
+      now
+    )}) 21:00 ~ 24:00</span> <br>
+                <strong>목적 : 성과발표회 팀프로젝트 개발 </strong>
+            </div>
+            <br>
+            <div>
+                <table style="width: 100%;">
+                    <tr>
+                        <th style="width: 50px;">No.</th>
+                        <th style="width: 150px;">이름</th>
+                        <th style="width: 500px;">사유</th>
+                        <th style="width: 150px;">비고</th>
+                    </tr>`;
     const enrolls = results;
     const remain = 18 - enrolls.length;
 
@@ -105,6 +106,8 @@ const toPdf = async results => {
     pdf.create(html, option).toFile("./enrollment.pdf", (err, info) => {
       if (err) throw err;
       console.log("pdf 변환됨.");
+      callback();
+      data = "";
     });
   } catch (err) {
     console.log(err);

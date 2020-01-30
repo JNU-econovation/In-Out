@@ -23,11 +23,9 @@ const toProfessor = async (req, res) => {
         errCode: 40
       });
     } else {
-      await toPdf.toPdf(data);
+      await toPdf.toPdf(data, sender.sendMail);
 
-      setTimeout(() => {
-        sender.sendMail();
-      }, 0);
+      return res.status(200).end();
     }
   } catch (err) {
     return res.status(500).json({
