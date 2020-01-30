@@ -43,7 +43,7 @@ function App() {
           </PrivateRoute>
         </Switch>
 
-        <Bot></Bot>
+        {auth ? <Bot></Bot> : null}
       </Router>
     </ThemeProvider>
   );
