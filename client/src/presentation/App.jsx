@@ -11,6 +11,7 @@ import { Service } from "@service";
 import { MainHeader } from "./pages/home/Header";
 import { Bot } from "./pages/home/Header/bot";
 import "./App.css";
+import { Admin } from "./pages/admin";
 
 function App() {
   const authDispatch = useAuthDispatch();
@@ -37,7 +38,9 @@ function App() {
           <PrivateRoute exact path="/mypage" auth={auth}>
             <MyPage />
           </PrivateRoute>
-          <PrivateRoute exact path="/admin" auth={auth}></PrivateRoute>
+          <PrivateRoute exact path="/admin" auth={auth}>
+            <Admin />
+          </PrivateRoute>
         </Switch>
 
         <Bot></Bot>

@@ -63,7 +63,7 @@ const Login = () => {
         ></ListInfoInput>
         <ListInfoInput
           subject={"비밀번호"}
-          type={"password"}
+          inputType="password"
           value={password}
           onChange={handlePasswordChange}
         ></ListInfoInput>
@@ -85,7 +85,7 @@ const LoginBox = styled.section`
   color: black;
 `;
 
-const LoginFrom = styled.section`
+const LoginFrom = styled.form`
   box-sizing: border-box;
   display: flex;
   flex-direction: column;

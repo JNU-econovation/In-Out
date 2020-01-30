@@ -3,6 +3,7 @@ import styled, { css } from "styled-components";
 import { useAuthState } from "data/context/auth-context";
 import { useLocation, useHistory } from "react-router-dom";
 import { useState } from "react";
+import { Service } from "@service";
 
 export const Bot = () => {
   const location = useLocation();
@@ -14,7 +15,6 @@ export const Bot = () => {
     register: false
   });
   useEffect(() => {
-    let element;
     switch (location.pathname) {
       case "/":
         setState({
@@ -40,6 +40,18 @@ export const Bot = () => {
     }
   }, [location]);
 
+  const logout = async function() {
+    try {
+      const result = await Service.authService.logout();
+      if (!result) {
+        history.push("/");
+      }
+      history.push("/login");
+    } catch (error) {
+      history.push("/");
+    }
+  };
+
   return (
     <BottomNavBox>
       <NavButton
@@ -57,7 +69,7 @@ export const Bot = () => {
         출입신청
       </NavButton>
       {auth ? (
-        <NavButton>로그아웃</NavButton>
+        <NavButton onClick={logout}>로그아웃</NavButton>
       ) : (
         <NavButton
           active={state.login}
