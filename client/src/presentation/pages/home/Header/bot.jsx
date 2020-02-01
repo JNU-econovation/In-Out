@@ -39,6 +39,12 @@ export const Bot = () => {
           register: false
         });
         break;
+      default:
+        setState({
+          login: false,
+          mypage: false,
+          register: false
+        });
     }
   }, [location]);
 
