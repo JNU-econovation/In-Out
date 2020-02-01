@@ -6,6 +6,7 @@ import { theme } from "./theme/theme";
 import Login from "./pages/home/login";
 import Register from "presentation/pages/home/register";
 import { PrivateRoute } from "presentation/components/private-route";
+import { AdminRouter } from "presentation/components/admin-router";
 import { useAuthDispatch, useAuthState } from "data/context/auth-context";
 import { Service } from "@service";
 import { MainHeader } from "./pages/home/Header";
@@ -38,8 +39,11 @@ function App() {
           <PrivateRoute exact path="/mypage" auth={auth}>
             <MyPage />
           </PrivateRoute>
+
           <PrivateRoute exact path="/admin" auth={auth}>
-            <Admin />
+            <AdminRouter>
+              <Admin />
+            </AdminRouter>
           </PrivateRoute>
         </Switch>
 
