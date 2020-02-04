@@ -73,6 +73,7 @@ const Modals = styled.section`
   z-index: 10;
   box-shadow: 1px 0px 5px grey;
   height: calc(100vh - 50px);
+  overflow: hidden;
   transition: 300ms;
   ${props => {
     if (props.on) {
