@@ -3,8 +3,9 @@ import styled from "styled-components";
 import { useAuthState, useAuthDispatch } from "data/context/auth-context";
 import { useHistory } from "react-router-dom";
 import { Service } from "@service";
+import hamburgerButton from "assets/hamberger.png";
 
-export const MainHeader = () => {
+export const MainHeader = ({ onModal }) => {
   const auth = useAuthState();
   const history = useHistory();
   const { userService } = Service;
@@ -45,10 +46,19 @@ export const MainHeader = () => {
         ) : (
           <TopButton>로그인</TopButton>
         )}
+        <Img src={hamburgerButton} onClick={onModal}></Img>
       </Box>
     </Header>
   );
 };
+
+const Img = styled.img`
+  height: 32px;
+  width: auto;
+  @media all and (min-width: 721px) {
+    display: none;
+  }
+`;
 
 const TopButton2 = styled.button`
   width: 60px;
@@ -133,6 +143,9 @@ const Box = styled.section`
 
   @media all and (max-width: 720px) {
     justify-content: center;
+    width: 72px;
+    margin-left: 8px;
+    margin-right: 8px;
   }
 
   @media all and (min-width: 721px) {
@@ -146,6 +159,7 @@ const BlockSpan = styled.span`
 `;
 
 const Header = styled.header`
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;

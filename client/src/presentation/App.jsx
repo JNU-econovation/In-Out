@@ -1,5 +1,9 @@
-import React, { useEffect } from "react";
-import { createGlobalStyle, ThemeProvider } from "styled-components";
+import React, { useEffect, useState } from "react";
+import styled, {
+  css,
+  createGlobalStyle,
+  ThemeProvider
+} from "styled-components";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { MyPage } from "./pages/mypage";
 import { theme } from "./theme/theme";
@@ -17,6 +21,7 @@ import { Admin } from "./pages/admin";
 function App() {
   const authDispatch = useAuthDispatch();
   const auth = useAuthState();
+  const [on, setOn] = useState(false);
   useEffect(() => {
     authDispatch({
       type: "CHANGE",
@@ -24,11 +29,21 @@ function App() {
     });
   }, [authDispatch]);
 
+  const setModal = () => {
+    setOn(on === false);
+  };
+
+  const closeModal = () => {
+    setOn(false);
+  };
   return (
     <ThemeProvider theme={theme}>
       <Global></Global>
       <Router>
-        <MainHeader></MainHeader>
+        <MainHeader onModal={setModal}></MainHeader>
+        <Modals on={on}>
+          <Bot closeModal={closeModal}></Bot>
+        </Modals>
         <Switch>
           <Route path="/login">
             <Login></Login>
@@ -39,19 +54,40 @@ function App() {
           <PrivateRoute exact path="/mypage" auth={auth}>
             <MyPage />
           </PrivateRoute>
-
           <PrivateRoute exact path="/admin" auth={auth}>
             <AdminRouter>
               <Admin />
             </AdminRouter>
           </PrivateRoute>
         </Switch>
-
-        {auth ? <Bot></Bot> : null}
       </Router>
     </ThemeProvider>
   );
 }
+
+const Modals = styled.section`
+  position: absolute;
+  background-color: white;
+  right: 0px;
+  top: 50px;
+  z-index: 10;
+  box-shadow: 1px 0px 5px grey;
+  height: calc(100vh - 50px);
+  transition: 300ms;
+  ${props => {
+    if (props.on) {
+      return css`
+        width: 100vw;
+      `;
+    }
+    return css`
+      width: 0vw;
+    `;
+  }};
+  @media all and (min-width: 721px) {
+    display: none;
+  }
+`;
 
 const Global = createGlobalStyle`
   html{
