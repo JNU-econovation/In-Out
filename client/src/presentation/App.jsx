@@ -41,7 +41,7 @@ function App() {
       <Global></Global>
       <Router>
         <MainHeader onModal={setModal}></MainHeader>
-        <Modals on={on}>
+        <Modals on={on} style={{ overflow: "hidden" }}>
           <Bot closeModal={closeModal}></Bot>
         </Modals>
         <Switch>
