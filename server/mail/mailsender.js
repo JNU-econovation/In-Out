@@ -14,8 +14,9 @@ const transporter = nodemailer.createTransport({
 const mailOptions = {
   from: emailConfig.senderEmail,
   to: emailConfig.receiverEmail,
-  subject: `${dateHandler.getFormatDate(now)} 출입 신청 내역`,
-  html: "박사님 오늘자 출입신청서 첨부합니다.",
+  subject: `${dateHandler.getFormatDate(now)} 출입 신청서`,
+  html: `에코노베이션 ${now.getFullYear()}년 ${now.getMonth() +
+    1}월 ${now.getDate()}일자 출입신청서 제출합니다.\n\n에코노베이션 올림`,
   attachments: [
     {
       filename: dateHandler.getFormatDate(now) + "출입신청.pdf",
