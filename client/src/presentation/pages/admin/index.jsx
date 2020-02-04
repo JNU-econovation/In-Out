@@ -13,10 +13,7 @@ export const Admin = () => {
     try {
       const result = await Service.mailService.submit();
       if (result) history.push("/");
-      console.log("이상해");
-    } catch (error) {
-      console.log("?");
-    }
+    } catch (error) {}
   };
 
   const checkFalse = () => {

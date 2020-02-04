@@ -88,7 +88,7 @@ const Register = () => {
         checkEnrollmentAlready();
         setModal({
           on: true,
-          message: "신청되웠습니다.",
+          message: "신청되었습니다.",
           title: "성공"
         });
       }

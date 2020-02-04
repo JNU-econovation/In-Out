@@ -38,7 +38,7 @@ export const MainHeader = () => {
         {auth ? (
           <>
             <TopButton onClick={() => history.push("/mypage")}>
-              마에페이지
+              마이페이지
             </TopButton>
             <TopButton onClick={logout}>로그아웃</TopButton>
           </>

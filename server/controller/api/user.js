@@ -18,7 +18,7 @@ const updatePassword = async (req, res) => {
 
     if (oldPasswword === newPassword) {
       return res.status(403).json({
-        message: "변경할 비밀번호가 기존 바밀번호와 동일합니다.",
+        message: "변경할 비밀번호가 기존 비밀번호와 동일합니다.",
         errCode: "23"
       });
     }
