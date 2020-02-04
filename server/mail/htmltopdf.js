@@ -7,6 +7,7 @@ let data = "";
 
 const toPdf = async (results, callback) => {
   try {
+    if (!results.length) throw new Error("예약이 없습니다.");
     data += `<!DOCTYPE html>
     <html lang="en">
     
