@@ -31,7 +31,7 @@ const sendMail = async () => {
     transporter.close();
     console.log(new Date() + " - mail success");
   } catch (err) {
-    console.log("mail fail");
+    console.log(err);
   }
 };
 

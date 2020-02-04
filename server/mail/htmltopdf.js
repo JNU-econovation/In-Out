@@ -43,7 +43,6 @@ const toPdf = async (results, callback) => {
                 )}</span><span> (${dateHandler.getDayToStr(
       now
     )}) 21:00 ~ 24:00</span> <br>
-                <strong>목적 : 성과발표회 팀프로젝트 개발 </strong>
             </div>
             <br>
             <div>
