@@ -5,7 +5,7 @@ import { useLocation, useHistory } from "react-router-dom";
 import { useState } from "react";
 import { Service } from "@service";
 
-export const Bot = () => {
+export const Bot = ({ closeModal }) => {
   const location = useLocation();
   const history = useHistory();
   const auth = useAuthState();
@@ -58,6 +58,7 @@ export const Bot = () => {
         type: "CHANGE",
         value: false
       });
+      closeModal();
       history.push("/login");
     } catch (error) {
       history.push("/");
@@ -69,14 +70,20 @@ export const Bot = () => {
       <NavButton
         active={state.mypage}
         disabled={state.mypage}
-        onClick={() => history.push("/mypage")}
+        onClick={() => {
+          closeModal();
+          history.push("/mypage");
+        }}
       >
         마이페이지
       </NavButton>
       <NavButton
         active={state.register}
         disabled={state.register}
-        onClick={() => history.push("/")}
+        onClick={() => {
+          closeModal();
+          history.push("/");
+        }}
       >
         출입신청
       </NavButton>
@@ -86,7 +93,10 @@ export const Bot = () => {
         <NavButton
           active={state.login}
           disabled={state.login}
-          onClick={() => history.push("/login")}
+          onClick={() => {
+            closeModal();
+            history.push("/login");
+          }}
         >
           로그인
         </NavButton>
@@ -96,11 +106,12 @@ export const Bot = () => {
 };
 
 const NavButton = styled.section`
-  text-align: center;
-  height: 100%;
+  text-align: left;
+  border-bottom: 1px solid gray;
+  height: 50px;
   line-height: 50px;
   color: gray;
-  width: calc(100% / 3);
+  width: 100%;
   ${props => {
     if (props.active) {
       return css`
@@ -112,15 +123,14 @@ const NavButton = styled.section`
 `;
 
 const BottomNavBox = styled.section`
-  display: flex;
   box-sizing: border-box;
-  position: fixed;
-  top: calc(100vh - 50px);
-  height: 50px;
-  box-shadow: 0px -1px 2px grey;
-  font-size: 10pt;
-  border-top: none;
-  width: 100%;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  font-size: 14pt;
+  width: 100vw;
+
   @media all and (min-width: 721px) {
     display: none;
   }
