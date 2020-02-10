@@ -2,10 +2,10 @@ const fs = require("fs");
 const pdf = require("html-pdf");
 const dateHandler = require("./../util/date-handler");
 
-const now = new Date();
 let data = "";
 
 const toPdf = async (results, callback) => {
+  const now = new Date();
   try {
     if (!results.length) throw new Error("예약이 없습니다.");
     data += `<!DOCTYPE html>
